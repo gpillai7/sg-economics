@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Economics in Practice — Singapore</title>
+<title>Singapore Economy Tracker</title>
 <style>
 /* Offline-safe font stack — system fonts that closely match the design intent */
 
   /* ---- MOBILE OPTIMISATIONS ---- */
   @media (max-width: 600px) {
-    .masthead-inner { flex-direction: column; gap: 8px; padding: 10px 16px; }
+    
     .nav-pills { gap: 4px; }
     .nav-pill { font-size: 0.55rem; padding: 3px 7px; }
-    .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 24px 20px; border-right: none; border-bottom: 2px solid var(--ink); }
-    .hero-title { font-size: 1.8rem; }
-    .hero-right { padding: 16px; }
-    .chapter-grid { grid-template-columns: repeat(4, 1fr); }
+    .hero { height: auto; min-height: 380px; align-items: flex-end; }
+    .hero-content { grid-template-columns: 1fr; gap: 20px; padding: 24px 16px; }
+    .hero-title { font-size: 2rem; }
+    .hero-stats { flex-wrap: wrap; gap: 12px; } .stat-val { font-size: 1rem; }
     .main-layout { grid-template-columns: 1fr; }
+    
     .sidebar { position: relative; height: auto; top: 0; border-right: none; border-bottom: 2px solid var(--ink); }
     .sidebar-section { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; }
     .sidebar-label { width: 100%; margin-bottom: 2px; }
     .sidebar-item { flex: 0 0 auto; border: 1px solid var(--rule); border-radius: 3px; padding: 5px 8px; font-size: 0.7rem; }
     .sidebar-item.active { background: var(--accent2); color: white; }
-    .content-area { padding: 20px 16px; }
+    
     .module-title { font-size: 1.4rem; }
     .tab-bar { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
     .tab-btn { font-size: 0.6rem; padding: 7px 10px; }
@@ -58,134 +58,86 @@
     min-height: 100vh;
   }
 
-  /* ---- MASTHEAD ---- */
-  .masthead {
-    border-bottom: 3px double var(--ink);
-    padding: 0;
-    background: var(--ink);
-    color: var(--paper);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .masthead-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 32px;
-  }
-  .site-title {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-    color: var(--accent3);
-  }
-  .site-subtitle {
-    font-family: 'Courier New', 'Lucida Console', monospace;
-    font-size: 0.65rem;
-    color: #aaa;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-  .nav-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-  .nav-pill {
-    font-family: 'Courier New', 'Lucida Console', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border: 1px solid #555;
-    color: #ccc;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.15s;
-    border-radius: 2px;
-  }
-  .nav-pill:hover, .nav-pill.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: white;
-  }
-
   /* ---- HERO ---- */
   .hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 280px;
-    border-bottom: 2px solid var(--ink);
-  }
-  .hero-left {
-    padding: 48px 40px;
-    border-right: 2px solid var(--ink);
     position: relative;
+    width: 100%;
+    height: 440px;
+    border-bottom: 3px solid var(--ink);
     overflow: hidden;
+    display: flex;
+    align-items: flex-end;
   }
-  .hero-left::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 20px,
-      rgba(200,57,43,0.03) 20px,
-      rgba(200,57,43,0.03) 21px
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=1600&q=85&auto=format&fit=crop&crop=center');
+    background-size: cover;
+    background-position: center 55%;
+    filter: brightness(0.65) saturate(1.15);
+    z-index: 0;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(10,10,10,0.92) 0%,
+      rgba(10,10,10,0.5) 40%,
+      rgba(10,10,10,0.1) 70%,
+      transparent 100%
     );
-    pointer-events: none;
+    z-index: 1;
   }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 44px 64px;
+  }
+  .hero-text { max-width: 780px; }
   .hero-eyebrow {
     font-family: 'Courier New', 'Lucida Console', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
+    color: var(--accent3);
+    margin-bottom: 12px;
+    opacity: 0.85;
   }
   .hero-title {
     font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 3.2rem;
-    line-height: 1.1;
+    font-size: 3rem;
+    line-height: 1.08;
     font-weight: 700;
-    margin-bottom: 16px;
+    color: #ffffff;
+    margin-bottom: 14px;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.6);
   }
-  .hero-title em { font-style: italic; color: var(--accent2); }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent3);
+  }
   .hero-desc {
-    font-size: 0.9rem;
-    color: var(--muted);
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.68);
     line-height: 1.7;
-    max-width: 440px;
+    max-width: 460px;
   }
-  .hero-right {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  .hero-credit {
+    font-family: 'Courier New', monospace;
+    font-size: 0.48rem;
+    color: rgba(255,255,255,0.22);
+    position: absolute;
+    bottom: 7px;
+    right: 12px;
+    z-index: 3;
+    letter-spacing: 0.06em;
   }
-  .chapter-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1px;
-    background: var(--ink);
-    border: 1px solid var(--ink);
-  }
-  .chapter-tile {
-    background: var(--card-bg);
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-  }
-  .chapter-tile:hover { background: var(--accent); color: white; }
-  .chapter-tile:hover .tile-num { color: rgba(255,255,255,0.6); }
-  .chapter-tile:hover .tile-label { color: white; }
-  .tile-num {
-    font-family: 'Courier New', 'Lucida Console', monospace;
-    font-size: 0.6rem;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-  .tile-label {
-    font-size: 0.7rem;
-    font-weight: 500;
-    line-height: 1.3;
-    color: var(--ink);
-  }
+
 
   /* ---- MAIN LAYOUT ---- */
   .main-layout {
@@ -235,19 +187,14 @@
     color: white;
     font-weight: 500;
   }
-  .sidebar-item .ch-num {
-    font-family: 'Courier New', 'Lucida Console', monospace;
-    font-size: 0.6rem;
-    opacity: 0.6;
-    margin-right: 6px;
-  }
+  .sidebar-item 
 
   /* ---- CONTENT AREA ---- */
   .content-area { padding: 40px 48px; max-width: 960px; }
   .module { display: none; }
   .module.active { display: block; }
 
-  .module-header { margin-bottom: 32px; border-bottom: 2px solid var(--ink); padding-bottom: 20px; }
+  .module-header { margin-bottom: 32px; border-bottom: 2px solid var(--ink); padding-bottom: 20px; padding-top: 8px; padding-left: 20px; }
   .module-part {
     font-family: 'Courier New', 'Lucida Console', monospace;
     font-size: 0.6rem;
@@ -478,41 +425,163 @@
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; }
     .main-layout { grid-template-columns: 1fr; }
+    .content-area { padding: 24px 20px; }
     .sidebar { position: relative; height: auto; }
     .hero-title { font-size: 2rem; }
-    .content-area { padding: 24px 20px; }
+    
     .chapter-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 28px 0 0;
+  }
+  .stat-val {
+    font-family: 'Courier New', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent3);
+    letter-spacing: -0.01em;
+  }
+  .stat-lbl {
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .hero-stat-div {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.2);
+    margin: 0 28px 0 0;
+    flex-shrink: 0;
+  }
+
+  /* ---- FOOTER ---- */
+  .site-footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.65);
+    border-top: 3px solid var(--accent);
+    padding: 40px 0 28px;
+    margin-top: 0;
+  }
+  .footer-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .footer-licence {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-cc-icon {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .cc-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0;
+  }
+  .footer-text {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.65);
+  }
+  .footer-text strong {
+    color: var(--accent3);
+  }
+  .footer-text a {
+    color: var(--accent3);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer-text a:hover {
+    color: #fff;
+  }
+  .footer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer-source {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+  }
+  .footer-source em {
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+  }
+  .footer-copy {
+    font-family: 'Courier New', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  @media (max-width: 768px) {
+    .footer-inner { padding: 0 20px; }
+    .footer-licence { flex-direction: column; gap: 12px; }
+    .footer-cc-icon { flex-direction: row; }
   }
 </style>
 </head>
 <body>
 
-<!-- MASTHEAD -->
-<header class="masthead">
-  <div class="masthead-inner">
-    <div>
-      <div class="site-title">Economics in Practice</div>
-      <div class="site-subtitle">Evidence-Based Policymaking · Singapore</div>
-    </div>
-    <nav class="nav-pills">
-      <button class="nav-pill active" onclick="showPart('all')">All</button>
-      <button class="nav-pill" onclick="showPart('economic')">Economic</button>
-      <button class="nav-pill" onclick="showPart('socio')">Socioeconomic</button>
-      <button class="nav-pill" onclick="showPart('infra')">Infrastructural</button>
-    </nav>
-  </div>
-</header>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Interactive Learning Platform</div>
-    <h1 class="hero-title">Singapore's <em>Economic</em> Laboratory</h1>
-    <p class="hero-desc">Reproduce every key quantitative analysis from the textbook. Manipulate parameters, visualise data, and internalise the economic logic behind Singapore's policymaking. Select a chapter to begin.</p>
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Singapore · Macroeconomic Intelligence · Interactive Dashboard</div>
+      <h1 class="hero-title">Singapore<br><em>Economy Tracker</em></h1>
+      <p class="hero-desc">A real-time analytical platform tracking Singapore's macroeconomic indicators, structural transformation, and policy outcomes. From GDP growth dynamics and total factor productivity to housing affordability, labour market shifts, and fiscal sustainability — each module delivers interactive, data-driven analysis grounded in rigorous economic methodology.</p>
+    </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="stat-val">3.5%</span><span class="stat-lbl">GDP Growth 2023</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="stat-val">66.8%</span><span class="stat-lbl">Labour Force Participation</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="stat-val">0.398</span><span class="stat-lbl">Gini Coefficient</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="stat-val">$97,057</span><span class="stat-lbl">GDP per Capita (USD)</span></div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat"><span class="stat-val">2.1%</span><span class="stat-lbl">Core Inflation 2023</span></div>
   </div>
-  <div class="hero-right">
-    <div class="chapter-grid" id="chapter-grid"></div>
   </div>
+  <div class="hero-credit">Photo: Unsplash / Free to use</div>
 </section>
 
 <!-- MAIN LAYOUT -->
@@ -521,49 +590,49 @@
     <div class="sidebar-section">
       <div class="sidebar-label">Economic Policies</div>
       <button class="sidebar-item active" onclick="loadModule('ch2')" id="nav-ch2">
-        <span class="ch-num">Ch.2</span>Growth & GDP
+        Growth & GDP
       </button>
       <button class="sidebar-item" onclick="loadModule('ch3')" id="nav-ch3">
-        <span class="ch-num">Ch.3</span>Trade & Investment
+        Trade & Investment
       </button>
       <button class="sidebar-item" onclick="loadModule('ch4')" id="nav-ch4">
-        <span class="ch-num">Ch.4</span>Productivity & TFP
+        Productivity & TFP
       </button>
       <button class="sidebar-item" onclick="loadModule('ch5')" id="nav-ch5">
-        <span class="ch-num">Ch.5</span>Industrial Development
+        Industrial Development
       </button>
       <button class="sidebar-item" onclick="loadModule('ch6')" id="nav-ch6">
-        <span class="ch-num">Ch.6</span>Enterprise Landscape
+        Enterprise Landscape
       </button>
       <button class="sidebar-item" onclick="loadModule('ch7')" id="nav-ch7">
-        <span class="ch-num">Ch.7</span>Labour & Human Capital
+        Labour & Human Capital
       </button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Socioeconomic Policies</div>
       <button class="sidebar-item" onclick="loadModule('ch8')" id="nav-ch8">
-        <span class="ch-num">Ch.8</span>Income Inequality
+        Income Inequality
       </button>
       <button class="sidebar-item" onclick="loadModule('ch9')" id="nav-ch9">
-        <span class="ch-num">Ch.9</span>Family & Divorce
+        Family & Divorce
       </button>
       <button class="sidebar-item" onclick="loadModule('ch10')" id="nav-ch10">
-        <span class="ch-num">Ch.10</span>Healthcare Costs
+        Healthcare Costs
       </button>
       <button class="sidebar-item" onclick="loadModule('ch11')" id="nav-ch11">
-        <span class="ch-num">Ch.11</span>Crime & Deterrence
+        Crime & Deterrence
       </button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Infrastructural Policies</div>
       <button class="sidebar-item" onclick="loadModule('ch12')" id="nav-ch12">
-        <span class="ch-num">Ch.12</span>Environment & CBA
+        Environment & CBA
       </button>
       <button class="sidebar-item" onclick="loadModule('ch13')" id="nav-ch13">
-        <span class="ch-num">Ch.13</span>Housing Market
+        Housing Market
       </button>
       <button class="sidebar-item" onclick="loadModule('ch14')" id="nav-ch14">
-        <span class="ch-num">Ch.14</span>Land Transport
+        Land Transport
       </button>
     </div>
   </aside>
@@ -573,7 +642,7 @@
     <!-- MODULE: CH2 - GROWTH -->
     <div class="module active" id="mod-ch2">
       <div class="module-header">
-        <div class="module-part">Chapter 2 · Economic Policies</div>
+        <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Singapore Exceptionalism:<br>Growth in a Small Open Economy</h2>
         <p class="module-intro">Singapore's economic development since the 1960s demonstrates how a small state with no natural resources achieved rapid transformation. This module covers GDP trend decomposition, growth accounting, the small state constraint, and fiscal multiplier analysis.</p>
       </div>
@@ -698,7 +767,7 @@
     <!-- MODULE: CH3 - TRADE -->
     <div class="module" id="mod-ch3">
       <div class="module-header">
-        <div class="module-part">Chapter 3 · Economic Policies</div>
+        <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Trade & Investment:<br>Measuring External Dependency</h2>
         <p class="module-intro">Singapore's trade statistics require careful adjustment. Jayaram & He (2009) showed that conventional export-to-GDP ratios overstate external dependency. This module reproduces the import-adjusted method and global value chain analysis.</p>
       </div>
@@ -814,7 +883,7 @@
     <!-- MODULE: CH4 - PRODUCTIVITY -->
     <div class="module" id="mod-ch4">
       <div class="module-header">
-        <div class="module-part">Chapter 4 · Economic Policies</div>
+        <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Productivity-Driven &<br>Innovation-Led Growth</h2>
         <p class="module-intro">TFP is the residual driver of long-run growth. This module covers labour productivity, multifactor productivity (MFP), the production function estimation approach, and R&D elasticity analysis using data from Singapore's public sector economists.</p>
       </div>
@@ -926,7 +995,7 @@
     <!-- MODULE: CH5 - INDUSTRIAL -->
     <div class="module" id="mod-ch5">
       <div class="module-header">
-        <div class="module-part">Chapter 5 · Economic Policies</div>
+        <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Industrial Development<br>in Singapore</h2>
         <p class="module-intro">Singapore's industrial policy has evolved from labour-intensive manufacturing to knowledge-intensive, high-value activities. This chapter analyses sectoral composition, shift-share analysis, and industrial diversification using the SSIC framework.</p>
       </div>
@@ -979,7 +1048,7 @@
     <!-- MODULE: CH6 - ENTERPRISE -->
     <div class="module" id="mod-ch6">
       <div class="module-header">
-        <div class="module-part">Chapter 6 · Economic Policies</div>
+        <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Singapore's<br>Enterprise Landscape</h2>
         <p class="module-intro">As of 2020: ~281,000 enterprises in Singapore. SMEs = 99% of count but only 43% of value-added. This module analyses firm-size distribution, productivity dispersion, and the impact of government enterprise development schemes.</p>
       </div>
@@ -1031,7 +1100,7 @@
     <!-- MODULE: CH7 - LABOUR -->
     <div class="module" id="mod-ch7">
       <div class="module-header">
-        <div class="module-part">Chapter 7 · Economic Policies</div>
+        <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Labour Markets &<br>Human Capital Investment</h2>
         <p class="module-intro">Returns to education and skills are central to Singapore's labour policy. This module analyses the Mincer earnings equation, returns to skills, CPF mechanisms, and the economics of lifelong learning.</p>
       </div>
@@ -1075,7 +1144,7 @@
     <!-- MODULE: CH8 - INEQUALITY -->
     <div class="module" id="mod-ch8">
       <div class="module-header">
-        <div class="module-part">Chapter 8 · Socioeconomic Policies</div>
+        <div class="module-part">Socioeconomic Policies</div>
         <h2 class="module-title">Income Inequality<br>& Intergenerational Mobility</h2>
         <p class="module-intro">The Gini coefficient and Great Gatsby Curve are central analytical tools. This module lets you compute Gini coefficients, explore the inequality-mobility relationship, and analyse Singapore's distributional trends using the percentile growth framework.</p>
       </div>
@@ -1217,7 +1286,7 @@
     <!-- MODULE: CH9 - FAMILY -->
     <div class="module" id="mod-ch9">
       <div class="module-header">
-        <div class="module-part">Chapter 9 · Socioeconomic Policies</div>
+        <div class="module-part">Socioeconomic Policies</div>
         <h2 class="module-title">Nurturing Strong Families:<br>Divorce Risk Analysis</h2>
         <p class="module-intro">MSF economists modelled how demographic factors correlate with divorce risk, using logistic regression. This module lets you explore divorce hazard models and the logic of targeted upstream support.</p>
       </div>
@@ -1266,7 +1335,7 @@
     <!-- MODULE: CH10 - HEALTHCARE -->
     <div class="module" id="mod-ch10">
       <div class="module-header">
-        <div class="module-part">Chapter 10 · Socioeconomic Policies</div>
+        <div class="module-part">Socioeconomic Policies</div>
         <h2 class="module-title">Healthcare Economics:<br>Moral Hazard & Cost-Sharing</h2>
         <p class="module-intro">Insurance creates moral hazard — insured individuals overconsume healthcare. This module models the optimal co-payment rate, the Stahl (1989) price dispersion model, and the welfare analysis of cost-sharing schemes.</p>
       </div>
@@ -1371,7 +1440,7 @@
     <!-- MODULE: CH11 - CRIME -->
     <div class="module" id="mod-ch11">
       <div class="module-header">
-        <div class="module-part">Chapter 11 · Socioeconomic Policies</div>
+        <div class="module-part">Socioeconomic Policies</div>
         <h2 class="module-title">Crime Economics:<br>Deterrence & Criminal Decision-Making</h2>
         <p class="module-intro">Becker (1968) models criminal behaviour as rational utility maximisation. This module lets you explore the expected utility of crime, optimal sanction design, and Singapore's deterrence evidence.</p>
       </div>
@@ -1427,7 +1496,7 @@
     <!-- MODULE: CH12 - ENVIRONMENT -->
     <div class="module" id="mod-ch12">
       <div class="module-header">
-        <div class="module-part">Chapter 12 · Infrastructural Policies</div>
+        <div class="module-part">Infrastructural Policies</div>
         <h2 class="module-title">Environmental Economics:<br>Non-Market Valuation & CBA</h2>
         <p class="module-intro">Environmental goods lack market prices. This module reproduces the Hedonic Pricing Method (ABC Waters), the Stated Preference / Discrete Choice Experiment (construction noise WTP), and a full Cost-Benefit Analysis framework.</p>
       </div>
@@ -1552,7 +1621,7 @@
     <!-- MODULE: CH13 - HOUSING -->
     <div class="module" id="mod-ch13">
       <div class="module-header">
-        <div class="module-part">Chapter 13 · Infrastructural Policies</div>
+        <div class="module-part">Infrastructural Policies</div>
         <h2 class="module-title">Housing Market<br>Economics</h2>
         <p class="module-intro">Singapore's housing market — 90% homeownership, HDB dominance — is managed through demand-supply tools and behavioural interventions. This module models price determinants, cooling measure effectiveness, and the Lee et al. (2017) Partial Capital Repayment RCT.</p>
       </div>
@@ -1668,7 +1737,7 @@
     <!-- MODULE: CH14 - TRANSPORT -->
     <div class="module" id="mod-ch14">
       <div class="module-header">
-        <div class="module-part">Chapter 14 · Infrastructural Policies</div>
+        <div class="module-part">Infrastructural Policies</div>
         <h2 class="module-title">Land Transport Economics</h2>
         <p class="module-intro">Singapore manages transport demand through pricing (COE, ERP), free pre-peak travel nudges, and behavioural tools. This module reproduces the FPPT commuter switching analysis (Goh & Lee, 2014), the ERP congestion pricing model, and the WTP for active mobility infrastructure.</p>
       </div>
@@ -1802,24 +1871,7 @@ function mkChart(id, config) {
   return charts[id];
 }
 
-// ========== CHAPTER TILE GRID ==========
-const tileData = [
-  { num:'Ch2', label:'Growth & GDP', mod:'ch2' },
-  { num:'Ch3', label:'Trade', mod:'ch3' },
-  { num:'Ch4', label:'Productivity', mod:'ch4' },
-  { num:'Ch5', label:'Industry', mod:'ch5' },
-  { num:'Ch6', label:'Enterprise', mod:'ch6' },
-  { num:'Ch7', label:'Labour', mod:'ch7' },
-  { num:'Ch8', label:'Inequality', mod:'ch8' },
-  { num:'Ch9', label:'Family', mod:'ch9' },
-  { num:'Ch10', label:'Healthcare', mod:'ch10' },
-  { num:'Ch11', label:'Crime', mod:'ch11' },
-  { num:'Ch12', label:'Environment', mod:'ch12' },
-  { num:'Ch13', label:'Housing', mod:'ch13' },
-  { num:'Ch14', label:'Transport', mod:'ch14' },
-  { num:'Ch15', label:'Conclusion', mod:'ch2' },
-];
-// grid population moved into DOMContentLoaded below
+// ======// CHAPTER TILE GRID removed
 
 // ========== NAVIGATION ==========
 function loadModule(id) {
@@ -2921,18 +2973,40 @@ function updateCOE() {
 // ========== INIT ==========
 window.addEventListener('DOMContentLoaded', () => {
   // Populate chapter tile grid safely after DOM is ready
-  const grid = document.getElementById('chapter-grid');
-  if (grid) {
-    tileData.forEach(t => {
-      const div = document.createElement('div');
-      div.className = 'chapter-tile';
-      div.innerHTML = '<div class="tile-num">' + t.num + '</div><div class="tile-label">' + t.label + '</div>';
-      div.addEventListener('click', function() { loadModule(t.mod); });
-      grid.appendChild(div);
-    });
-  }
   loadModule('ch2');
 });
 </script>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-licence">
+      <div class="footer-cc-icon">
+        <span class="cc-badge">CC</span>
+        <span class="cc-badge">BY</span>
+        <span class="cc-badge">NC</span>
+      </div>
+      <div class="footer-text">
+        <strong>Singapore Economy Tracker</strong> is licensed under a
+        <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">
+          Creative Commons Attribution-NonCommercial 4.0 International Licence (CC BY-NC 4.0)
+        </a>.
+        You are free to share and adapt this material for non-commercial purposes,
+        provided appropriate credit is given and any changes are indicated.
+      </div>
+    </div>
+    <div class="footer-meta">
+      <div class="footer-source">
+        Source material: <em>Economics in Practice: Evidence-Based Policymaking in Singapore</em>.
+        All econometric models, charts, and interactive analyses are reproduced for educational purposes only.
+      </div>
+      <div class="footer-copy">
+        © 2025 Singapore Economy Tracker &nbsp;·&nbsp;
+        Built for academic and educational use &nbsp;·&nbsp;
+        Not for commercial distribution
+      </div>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
