@@ -423,13 +423,26 @@
 
   /* ---- RESPONSIVE ---- */
   @media (max-width: 768px) {
-    .hero { grid-template-columns: 1fr; }
+    .hero { height: auto; min-height: 100svh; }
+    .hero-content { grid-template-columns: 1fr; gap: 16px; padding: 24px 20px 28px; }
+    .hero-title { font-size: 2.2rem; }
+    .hero-desc { font-size: 0.78rem; }
     .main-layout { grid-template-columns: 1fr; }
     .content-area { padding: 24px 20px; }
     .sidebar { position: relative; height: auto; }
-    .hero-title { font-size: 2rem; }
-    
-    .chapter-grid { grid-template-columns: 1fr 1fr; }
+    .chapter-grid { grid-template-columns: 1fr 1fr; display: none; }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 0;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    .hero-stat { padding: 0; }
+    .hero-stat-div { display: none; }
+    .stat-val { font-size: 1.3rem; }
+    .stat-lbl { font-size: 0.5rem; }
   }
 
   .hero-stats {
@@ -566,7 +579,7 @@
     <div class="hero-text">
       <div class="hero-eyebrow">Singapore · Macroeconomic Intelligence · Interactive Dashboard</div>
       <h1 class="hero-title">Singapore<br><em>Economy Tracker</em></h1>
-      <p class="hero-desc">A real-time analytical platform tracking Singapore's macroeconomic indicators, structural transformation, and policy outcomes. From GDP growth dynamics and total factor productivity to housing affordability, labour market shifts, and fiscal sustainability — each module delivers interactive, data-driven analysis grounded in rigorous economic methodology.</p>
+      <p class="hero-desc">Interactive modules reproducing every key quantitative analysis from the textbook. Manipulate parameters, visualise data, and explore the economic logic behind Singapore's policymaking.</p>
     </div>
 
   <div class="hero-stats">
