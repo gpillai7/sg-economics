@@ -8,6 +8,14 @@
 
   const _staticFallback = window.updateGrowthAcct;
 
+  /* ── Embedded static data — never depends on window.growthData ── */
+  const STATIC_DATA = {
+    '6580':{ gdp:8.5, capital:12.0, labour:3.5, name:'1965–1980' },
+    '8097':{ gdp:8.1, capital:10.2, labour:2.8, name:'1980–1997' },
+    '9710':{ gdp:4.2, capital:5.5,  labour:1.2, name:'1997–2010' },
+    '1025':{ gdp:3.1, capital:4.0,  labour:0.8, name:'2010–2025' },
+  };
+
   const EMP_BENCH = {
     1965:850e3,1966:878e3,1967:908e3,1968:943e3,1969:976e3,
     1970:930e3,1971:958e3,1972:1007e3,1973:1055e3,1974:1087e3,
@@ -157,7 +165,7 @@
     const avEl=document.getElementById('alpha-val'); if(avEl) avEl.textContent=alpha.toFixed(2);
     const dvEl=document.getElementById('delta-val'); if(dvEl) dvEl.textContent=(delta*100).toFixed(1)+'%';
     const per=document.getElementById('growth-period')?.value;
-    const d=periods?.[per]??window.growthData?.[per];
+    const d=periods?.[per]??getStaticData()?.[per];
     LOG('period:', per, 'data found:', !!d, d);
     if(!d) return;
     const cap=alpha*d.capital, lab=(1-alpha)*d.labour, tfp=d.gdp-cap-lab;
@@ -176,9 +184,11 @@
 
   let _livePeriods=null,_rawCache=null,_listenersAdded=false,_initStarted=false;
 
+  function getStaticData(){ return window.growthData ?? STATIC_DATA; }
+
   function recompute(){
     LOG('recompute — _rawCache:', !!_rawCache);
-    if(!_rawCache){render(window.growthData);return;}
+    if(!_rawCache){render(getStaticData());return;}
     _livePeriods=buildPeriods(_rawCache,getAlpha(),getDelta());
     if(window.growthData) Object.assign(window.growthData,_livePeriods);
     render(_livePeriods);
@@ -198,9 +208,9 @@
     LOG('initGDPGrowthAcct called — _initStarted:', _initStarted);
     ensureDeltaSlider();
     attachListeners();
-    if(_initStarted){render(_livePeriods??window.growthData);return;}
+    if(_initStarted){render(_livePeriods??getStaticData());return;}
     _initStarted=true;
-    render(window.growthData);
+    render(getStaticData());
     try{
       _rawCache=await loadSeries();
       _livePeriods=buildPeriods(_rawCache,getAlpha(),getDelta());
@@ -210,11 +220,11 @@
     }catch(err){
       LOG('API error:', err.message);
       setStatus('\u26a0 Static \u2014 '+err.message,true);
-      if(_staticFallback) _staticFallback();
+      render(getStaticData());
     }
   };
 
-  window.updateGrowthAcct=function(){render(_livePeriods??window.growthData);};
+  window.updateGrowthAcct=function(){render(_livePeriods??getStaticData());};
   window.recomputeGrowthAcct=recompute;
 
   LOG('module loaded');
