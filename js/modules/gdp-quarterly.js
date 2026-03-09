@@ -338,15 +338,11 @@
     }
   }
 
-  /* ── Hook into tab switching ─────────────────────────────── */
-  // Initialise when the quarterly tab is first shown
-  const _origSwitchTab = window.switchTab;
-  window.switchTab = function (module, tab, evt) {
-    if (_origSwitchTab) _origSwitchTab(module, tab, evt);
-    if (module === 'ch2' && tab === 'quarterly') {
-      // Small delay to let the panel become visible before Chart.js measures it
-      setTimeout(init, 50);
-    }
+  /* ── Expose named init for initTab hook in index.html ───── */
+  // Called by initTab('ch2','quarterly') — no switchTab override needed
+  window.initGDPQuarterly = function () {
+    buildPanel();
+    setTimeout(init, 50);
   };
 
 })();
