@@ -426,6 +426,52 @@
   .kpi-label { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; opacity:.6; margin-top:.2rem; }
   .kpi-sub   { font-size:.68rem; opacity:.45; margin-top:.15rem; }
   @media(max-width:768px){ .kpi-row { grid-template-columns:repeat(2,1fr); } }
+  /* ---- NEWSLETTER LAYOUT ---- */
+  .nl-wrap {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0 2rem;
+    align-items: start;
+  }
+  .nl-wrap.nl-left { grid-template-columns: 420px 1fr; }
+  .nl-text-col, .nl-chart-col { min-width: 0; }
+  .nl-section { margin-bottom: 1.4rem; }
+  .nl-section-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .nl-body {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+  .nl-divider { border:none; border-top:1px solid var(--rule); margin:1.2rem 0; }
+  .nl-chart-box {
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 12px;
+    position: sticky;
+    top: 16px;
+  }
+  .nl-chart-box .chart-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .callout.insight { border-color:var(--accent2); background:rgba(26,82,118,0.06); }
+  @media(max-width:900px){
+    .nl-wrap, .nl-wrap.nl-left { grid-template-columns: 1fr; }
+    .nl-chart-col { order: -1; }
+  }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
@@ -678,37 +724,62 @@
       <div class="tab-panel active" id="ch2-gdp">
         <div class="analysis-card">
           <div class="card-header">
-            <span class="card-title">Singapore Real GDP Growth (1961–present)</span>
+            <span class="card-title">Singapore Real GDP Growth (1961&ndash;present)</span>
             <span class="card-tag">Time Series</span>
           </div>
           <div class="card-body">
-            <div class="card-desc">Singapore's real GDP per capita growth has followed distinctive phases: catch-up growth (1965–1997), crisis-disrupted growth (1997–2010), and maturing growth (2010–present). The chart below reconstructs these phases using representative annual data.</div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">Display Metric</label>
-                <select class="ctrl-select" id="gdp-metric" onchange="updateGDPChart()">
-                  <option value="real_gdp">Real GDP Growth Rate (%)</option>
-                  <option value="gdp_per_capita">GDP per Capita (USD)</option>
-                  <option value="gdp_level">Real GDP Index (1965=100)</option>
-                </select>
+            <div class="nl-wrap">
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Explanation</div>
+                  <div class="nl-body">GDP &mdash; Gross Domestic Product &mdash; measures the total market value of all final goods and services produced within a country&rsquo;s borders in a given year. <em>Real</em> GDP strips out the effects of inflation by expressing output in constant prices, allowing meaningful comparison across time. The annual growth rate is computed as <code>g&thinsp;=&thinsp;(Y<sub>t</sub>&nbsp;&minus;&nbsp;Y<sub>t&minus;1</sub>)/Y<sub>t&minus;1</sub></code>, where <em>Y</em> is real output. GDP per capita &mdash; dividing by population &mdash; adjusts for the fact that a larger economy may simply reflect a bigger workforce, not higher living standards.</div>
+                  <div class="nl-body">How you measure GDP growth matters. Singapore&rsquo;s Department of Statistics publishes chain-linked volume measures (Chained 2015 prices) as its headline series, effectively weighting each year&rsquo;s growth by that year&rsquo;s price structure rather than a fixed base year. This mitigates the well-known Gerschenkron bias: fixed-base indices overstate growth as the structure of output shifts, because they assign the old base-year price to goods whose relative prices have since fallen.</div>
+                  <div class="nl-body">Singapore&rsquo;s growth story divides into three analytically distinct phases. The <strong>catch-up phase (1965&ndash;1997)</strong> averaged roughly 8&ndash;9% per year &mdash; capital-scarce economies can grow rapidly by importing and deploying known technologies. The <strong>crisis-disrupted phase (1997&ndash;2010)</strong> compressed average growth to around 5% through the Asian Financial Crisis, SARS, and the Global Financial Crisis. The <strong>maturing phase (2010&ndash;present)</strong> has settled near 2&ndash;3%, reflecting conditional convergence: easy factor-accumulation gains are exhausted, and growth depends increasingly on genuine productivity improvement.</div>
+                  <div class="nl-body">The slowdown is structural, not cyclical. The Solow model predicts it explicitly: steady-state growth equals technological progress plus population growth &mdash; both modest in Singapore. Projecting revenues or demand forecasts at historical 8% rates therefore embeds a systematic upward bias.</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Formula</div>
+                  <div class="formula-box">
+                    g<sub>t</sub> = (Y<sub>t</sub> &minus; Y<sub>t&minus;1</sub>) / Y<sub>t&minus;1</sub><br>
+                    <span class="formula-comment">// Y = Real GDP (Chained 2015 SGD); g expressed as %</span><br><br>
+                    GDP per Capita = Y<sub>t</sub> / Population<sub>t</sub><br>
+                    <span class="formula-comment">// Convergence: as Y &rarr; Y* (frontier), g &rarr; g<sub>steady</sub> &asymp; &delta;TFP + n</span>
+                  </div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Business Insight</div>
+                  <div class="nl-body">The most common forecasting error in Singapore-focused business plans is linear extrapolation from the 1980s&ndash;1990s miracle years. The structural slowdown from ~8% to ~3% is not a policy failure &mdash; it is the mathematically predictable endpoint of capital deepening in a small, already-wealthy open economy. Conditional convergence theory leaves no credible scenario in which Singapore re-accelerates to 6%+ growth without a step-change in total factor productivity or labour force size.</div>
+                  <div class="nl-body">At 2&ndash;3% real growth, growth must be taken from competitors, or manufactured via export of services and capital. Firms that benchmark internal growth targets against headline GDP are systematically underinvesting in competitive positioning and overestimating addressable market expansion.</div>
+                  <div class="nl-body">Investors in Singapore-listed equities should note that EPS consensus estimates have historically been built on GDP assumptions that lag the structural downshift by one to two cycles. The more relevant anchor for a mature, trade-dependent economy is a GDP path that tracks global trade volumes and services exports rather than domestic demand multipliers.</div>
+                </div>
               </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Highlight Period</label>
-                <select class="ctrl-select" id="gdp-phase" onchange="updateGDPChart()">
-                  <option value="all">All Periods</option>
-                  <option value="catchup">Catch-Up (1965–1997)</option>
-                  <option value="crisis">Crisis Era (1997–2010)</option>
-                  <option value="mature">Mature Growth (2010–present)</option>
-                </select>
+              <div class="nl-chart-col">
+                <div class="nl-chart-box">
+                  <div class="chart-label">Real GDP Growth &amp; Phases &middot; Source: DOS Singapore / World Bank</div>
+                  <canvas id="chart-gdp" height="220"></canvas>
+                  <div class="controls" style="margin-top:10px;flex-direction:column;gap:8px;">
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Display Metric</label>
+                      <select class="ctrl-select" id="gdp-metric" onchange="updateGDPChart()">
+                        <option value="real_gdp">Real GDP Growth Rate (%)</option>
+                        <option value="gdp_per_capita">GDP per Capita (USD)</option>
+                        <option value="gdp_level">Real GDP Index (1965=100)</option>
+                      </select>
+                    </div>
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Highlight Period</label>
+                      <select class="ctrl-select" id="gdp-phase" onchange="updateGDPChart()">
+                        <option value="all">All Periods</option>
+                        <option value="catchup">Catch-Up (1965&ndash;1997)</option>
+                        <option value="crisis">Crisis Era (1997&ndash;2010)</option>
+                        <option value="mature">Mature Growth (2010&ndash;present)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="chart-container">
-              <div class="chart-label">Source: Department of Statistics, Singapore / World Bank</div>
-              <canvas id="chart-gdp" height="260"></canvas>
-            </div>
-            <div class="callout finding">
-              <div class="callout-label">📊 Key Finding</div>
-              Singapore averaged ~8% real GDP growth during the catch-up phase (1965–1997), before slowing to ~5% in 1997–2010, and ~3% post-2010. This is consistent with conditional convergence theory — as Singapore approached the technology frontier, growth necessarily slowed.
             </div>
           </div>
         </div>
@@ -721,43 +792,66 @@
             <span class="card-tag">Interactive Model</span>
           </div>
           <div class="card-body">
-            <div class="card-desc">Growth accounting decomposes observed GDP growth into contributions from labour, capital, and total factor productivity (TFP). The standard Cobb-Douglas framework: <code>ΔY/Y = ΔA/A + α·ΔK/K + (1-α)·ΔL/L</code></div>
-            <div class="formula-box">
-              Y = A · K<sup>α</sup> · L<sup>(1-α)</sup><br>
-              <span class="formula-comment">// Taking logs and differentiating:</span><br>
-              g_Y = g_TFP + α·g_K + (1-α)·g_L<br>
-              <span class="formula-comment">// TFP (Solow Residual) = g_Y - α·g_K - (1-α)·g_L</span>
-            </div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">Capital Share (α): <span id="alpha-val">0.40</span></label>
-                <input type="range" class="ctrl-input" id="alpha" min="0.25" max="0.55" step="0.01" value="0.40"
-                  oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
+            <div class="nl-wrap nl-left">
+              <div class="nl-chart-col">
+                <div class="nl-chart-box">
+                  <div class="chart-label">Growth Decomposition &mdash; Stacked Bar</div>
+                  <canvas id="chart-growth-acct" height="220"></canvas>
+                  <div class="controls" style="margin-top:10px;flex-direction:column;gap:8px;">
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Capital Share (&alpha;): <span id="alpha-val">0.40</span></label>
+                      <input type="range" class="ctrl-input" id="alpha" min="0.25" max="0.55" step="0.01" value="0.40"
+                        oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
+                    </div>
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Depreciation (&delta;): <span id="delta-val">6%</span>
+                        <span style="font-size:.7rem;opacity:.5;margin-left:.3rem;">PIM</span>
+                      </label>
+                      <input type="range" class="ctrl-input" id="delta-pim" min="3" max="10" step="0.5" value="6"
+                        oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
+                    </div>
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Period</label>
+                      <select class="ctrl-select" id="growth-period"
+                        onchange="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
+                        <option value="6580">1965&ndash;1980 (Early)</option>
+                        <option value="8097">1980&ndash;1997 (Rapid)</option>
+                        <option value="9710" selected>1997&ndash;2010 (Crisis)</option>
+                        <option value="1025">2010&ndash;2025 (Mature)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="result-box" id="growth-result" style="margin-top:8px;font-size:0.72rem;">
+                    Select a period and adjust &alpha; to see the decomposition.
+                  </div>
+                </div>
               </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Depreciation Rate (δ): <span id="delta-val">6%</span>
-                  <span style="font-size:.7rem;opacity:.5;margin-left:.3rem;">PIM capital stock</span>
-                </label>
-                <input type="range" class="ctrl-input" id="delta-pim" min="3" max="10" step="0.5" value="6"
-                  oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Explanation</div>
+                  <div class="nl-body">Growth accounting decomposes observed GDP growth into three contributors: capital accumulation, labour input, and total factor productivity (TFP). The conceptual foundation is a Cobb-Douglas production function: <code>Y&nbsp;=&nbsp;A&middot;K<sup>&alpha;</sup>&middot;L<sup>(1&minus;&alpha;)</sup></code>. Taking logarithms and differentiating yields the accounting identity: output growth equals TFP growth plus the capital-share&ndash;weighted growth of capital plus the labour-share&ndash;weighted growth of labour.</div>
+                  <div class="nl-body">The framework requires a capital stock measure, which is not directly observable. The <strong>Perpetual Inventory Method (PIM)</strong> &mdash; used here &mdash; accumulates past gross fixed capital formation flows, depreciating them at an assumed rate &delta;: <code>K<sub>t</sub>&nbsp;=&nbsp;(1&minus;&delta;)K<sub>t&minus;1</sub>&nbsp;+&nbsp;I<sub>t</sub></code>. The initial capital stock is calibrated by dividing the first year&rsquo;s investment by (g+&delta;). PIM is the workhorse because it is tractable from national accounts data alone, but it is sensitive to the assumed depreciation rate &mdash; hence the adjustable slider.</div>
+                  <div class="nl-body">The capital share &alpha; is similarly contested. National accounts theory suggests &alpha; should equal the share of gross operating surplus in GDP &mdash; approximately 0.38&ndash;0.45 for Singapore, reflecting the capital-intensive nature of electronics, petrochemicals, and financial services. A higher &alpha; attributes more growth to capital and less to TFP, which matters greatly for policy conclusions about the role of innovation.</div>
+                  <div class="nl-body">TFP &mdash; the Solow Residual &mdash; is the portion of growth unexplained by measured inputs: <code>TFP&nbsp;=&nbsp;g<sub>Y</sub>&nbsp;&minus;&nbsp;&alpha;&middot;g<sub>K</sub>&nbsp;&minus;&nbsp;(1&minus;&alpha;)&middot;g<sub>L</sub></code>. It captures technological progress, resource allocation improvements, and measurement error. Crucially it is not directly measured &mdash; it is a residual, famously described by Abramovitz as &ldquo;a measure of our ignorance.&rdquo;</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Formula</div>
+                  <div class="formula-box" style="font-size:0.78rem;">
+                    Y<sub>t</sub> = A<sub>t</sub> &middot; K<sub>t</sub><sup>&alpha;</sup> &middot; L<sub>t</sub><sup>(1&minus;&alpha;)</sup> &nbsp;&nbsp;<span class="formula-comment">// Cobb-Douglas</span><br>
+                    K<sub>t</sub> = (1&minus;&delta;)K<sub>t&minus;1</sub> + I<sub>t</sub> &nbsp;&nbsp;<span class="formula-comment">// PIM capital stock</span><br>
+                    g<sub>Y</sub> = g<sub>TFP</sub> + &alpha;&middot;g<sub>K</sub> + (1&minus;&alpha;)&middot;g<sub>L</sub> &nbsp;&nbsp;<span class="formula-comment">// Growth accounting identity</span><br>
+                    TFP = g<sub>Y</sub> &minus; &alpha;&middot;g<sub>K</sub> &minus; (1&minus;&alpha;)&middot;g<sub>L</sub> &nbsp;&nbsp;<span class="formula-comment">// Solow Residual</span>
+                  </div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Business Insight</div>
+                  <div class="nl-body">The most striking finding from Singapore&rsquo;s growth accounting is how investment-driven the story remains. Capital deepening accounts for roughly half or more of total GDP growth across all four periods &mdash; a pattern more characteristic of emerging economies than mature frontier economies like the US or Japan, where TFP contributes 40&ndash;50% of growth. Singapore&rsquo;s TFP share has historically been in the 18&ndash;25% range, mirroring the 1990s Young&ndash;Krugman debate findings on East Asian growth.</div>
+                  <div class="nl-body">As the economy matures and labour inputs plateau due to demographic constraints, sustaining growth requires either a step-up in TFP &mdash; through R&amp;D, digitalisation, or structural reform &mdash; or continued capital deepening. The government&rsquo;s emphasis on Smart Nation and high-tech manufacturing clusters can be read as a deliberate attempt to shift toward TFP-driven growth.</div>
+                  <div class="nl-body">For corporate planners, the sensitivity of TFP to the &alpha; assumption (try the slider) reveals an uncomfortable truth: the narrative around Singapore&rsquo;s innovation economy is partly a function of how generously you measure capital&rsquo;s contribution. Strategies premised on &ldquo;productivity-led growth&rdquo; should be tested across the full range of plausible &alpha; values.</div>
+                </div>
               </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Period</label>
-                <select class="ctrl-select" id="growth-period"
-                  onchange="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
-                  <option value="6580">1965–1980 (Early)</option>
-                  <option value="8097">1980–1997 (Rapid)</option>
-                  <option value="9710" selected>1997–2010 (Crisis)</option>
-                  <option value="1025">2010–2025 (Mature)</option>
-                </select>
-              </div>
-            </div>
-            <div class="chart-container">
-              <div class="chart-label">Growth Decomposition — Stacked Bar Chart</div>
-              <canvas id="chart-growth-acct" height="220"></canvas>
-            </div>
-            <div class="result-box" id="growth-result">
-              Select a period and adjust α to see the decomposition.
             </div>
           </div>
         </div>
@@ -770,35 +864,104 @@
             <span class="card-tag">Policy Model</span>
           </div>
           <div class="card-body">
-            <div class="card-desc">GDP baseline from SingStat M015731 (nominal, 2024). Tax revenue actuals from MOF Budget Annex / IRAS Annual Reports FY2013&ndash;FY2024. Buoyancies computed as median (dT/T)/(dY/Y) vs nominal GDP 2014&ndash;2024: CIT=0.66, PIT=0.78, GST=0.56. Multiplier range calibrated to Singapore&rsquo;s small open economy (IMF: 0.5&ndash;1.0).</div>
-            <div id="fiscal-kpis" class="kpi-row"></div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">GDP Shock (%): <span id="gdp-shock-val">-5.0</span>%</label>
-                <input type="range" class="ctrl-input" id="gdp-shock" min="-15" max="10" step="0.5" value="-5" oninput="updateFiscal()">
+            <div class="nl-wrap">
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Explanation</div>
+                  <div class="nl-body">Tax revenue buoyancy measures how sensitively government revenues respond to changes in GDP: <code>&beta;&nbsp;=&nbsp;(&Delta;T/T)&nbsp;/&nbsp;(&Delta;Y/Y)</code>. A buoyancy of 1.0 means revenues grow proportionally with the economy. Above 1 implies a progressive system that captures an increasing share of income; below 1 implies structural revenue drag. Buoyancy should be distinguished from tax <em>elasticity</em> &mdash; buoyancy is measured from actual receipts including discretionary policy changes, while elasticity holds the tax code constant. Buoyancy is the operationally relevant measure for fiscal planning.</div>
+                  <div class="nl-body">The canonical reference for Singapore is the 2009 MOF working paper, which estimated buoyancies of ~1.0 for CIT, ~1.2 for PIT, and ~1.5 for GST. Our empirical re-estimation using MOF Budget Annex / IRAS Annual Report data for FY2013&ndash;FY2024 yields materially different results: CIT&nbsp;0.66, PIT&nbsp;0.78, GST&nbsp;0.56. We compute the median of year-by-year &beta; estimates, excluding outlier years where nominal GDP moved by more than 15% (2020 COVID collapse, 2021 rebound).</div>
+                  <div class="nl-body">Why the divergence from 2009? Three structural factors explain it. First, Singapore&rsquo;s corporate tax base has become more international: multinationals increasingly book profits via IP holding structures sensitive to global transfer-pricing norms rather than Singapore&rsquo;s own GDP cycle. Second, PIT progressivity has been partially offset by expanded reliefs (earned income, parent, CPF contributions) that moderate effective-rate growth. Third, GST buoyancy has been compressed by a shift toward GST-exempt services (healthcare, education, finance) and by GST voucher offset schemes.</div>
+                  <div class="nl-body">The fiscal multiplier captures the GDP impact of a unit of stimulus spending. For Singapore&rsquo;s small, highly open economy, the theoretical prior is a low multiplier &mdash; perhaps 0.3&ndash;0.7 &mdash; because a high proportion of additional demand leaks abroad through imports. IMF estimates for small open economies cluster around 0.5&ndash;0.8 in normal conditions, rising toward 1.0&ndash;1.2 during recessions when the private sector is deleveraging.</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Formula</div>
+                  <div class="formula-box" style="font-size:0.78rem;">
+                    &beta; = (&Delta;T/T) / (&Delta;Y/Y) &nbsp;&nbsp;<span class="formula-comment">// Tax revenue buoyancy</span><br>
+                    T<sub>shocked</sub> = T<sub>base</sub> &times; (1 + &beta; &times; g<sub>shock</sub>) &nbsp;&nbsp;<span class="formula-comment">// Revenue after GDP shock</span><br>
+                    GDP<sub>recovered</sub> = GDP<sub>shocked</sub> + Stimulus &times; &mu; &nbsp;&nbsp;<span class="formula-comment">// GDP with multiplier effect</span><br>
+                    Net fiscal cost = Stimulus &minus; &Delta;T<sub>recovered</sub> &nbsp;&nbsp;<span class="formula-comment">// Stimulus minus revenue clawback</span>
+                  </div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Business Insight</div>
+                  <div class="nl-body">The empirical buoyancies &mdash; CIT 0.66, PIT 0.78, GST 0.56 &mdash; are substantially lower than the 2009 MOF estimates. This has a counterintuitive implication: Singapore&rsquo;s tax revenues are <em>less</em> volatile than headline GDP would suggest. A 10% GDP decline translates to only a 6.6% fall in CIT and a 5.6% fall in GST. For businesses that sell to government or government-linked entities, revenue visibility is materially higher than raw GDP volatility implies.</div>
+                  <div class="nl-body">Low buoyancy also constrains the revenue upside in boom years. When GDP grows at 4%, CIT revenues are likely to grow at only 2.6% organically. Singapore&rsquo;s fiscal surpluses in boom years therefore depend more on controlled expenditure growth and investment returns from past reserves &mdash; a politically managed variable, not an automatic stabiliser.</div>
+                  <div class="nl-body">At Singapore&rsquo;s realistic multiplier of 0.5&ndash;0.7, a SGD 20bn stimulus package generates approximately SGD 10&ndash;14bn of additional GDP. The direct fiscal revenue recovery from that GDP increment is modest &mdash; perhaps SGD 0.5&ndash;1bn &mdash; meaning the net fiscal cost is close to the headline stimulus figure. This is an argument for being clear-eyed about the inter-generational cost of deploying past reserves.</div>
+                </div>
               </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Fiscal Multiplier: <span id="mult-val">0.7</span></label>
-                <input type="range" class="ctrl-input" id="mult" min="0.3" max="1.5" step="0.1" value="0.7" oninput="updateFiscal()">
+              <div class="nl-chart-col">
+                <div class="nl-chart-box">
+                  <div id="fiscal-kpis" class="kpi-row" style="grid-template-columns:repeat(2,1fr);"></div>
+                  <div class="controls" style="margin-top:10px;flex-direction:column;gap:8px;">
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">GDP Shock (%): <span id="gdp-shock-val">-5.0</span>%</label>
+                      <input type="range" class="ctrl-input" id="gdp-shock" min="-15" max="10" step="0.5" value="-5" oninput="updateFiscal()">
+                    </div>
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Fiscal Multiplier: <span id="mult-val">0.7</span></label>
+                      <input type="range" class="ctrl-input" id="mult" min="0.3" max="1.5" step="0.1" value="0.7" oninput="updateFiscal()">
+                    </div>
+                    <div class="ctrl-group">
+                      <label class="ctrl-label">Stimulus (SGD Bn): <span id="stim-val">20</span></label>
+                      <input type="range" class="ctrl-input" id="stim" min="0" max="100" step="5" value="20" oninput="updateFiscal()">
+                    </div>
+                  </div>
+                  <div class="result-box" id="fiscal-result" style="margin-top:8px;font-size:0.72rem;">Loading fiscal data&hellip;</div>
+                  <div class="chart-label" style="margin-top:12px;">Revenue Impact by Tax Type (SGD bn)</div>
+                  <canvas id="chart-fiscal" height="170"></canvas>
+                  <div class="chart-label" style="margin-top:12px;">Buoyancy Curves &mdash; Empirical 2014&ndash;2024</div>
+                  <canvas id="chart-fiscal-buoy" height="160"></canvas>
+                </div>
               </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Stimulus (SGD Bn): <span id="stim-val">20</span></label>
-                <input type="range" class="ctrl-input" id="stim" min="0" max="100" step="5" value="20" oninput="updateFiscal()">
-              </div>
-            </div>
-            <div class="result-box" id="fiscal-result">Loading fiscal data&hellip;</div>
-            <div class="chart-container">
-              <div class="chart-label">Revenue Impact by Tax Type (SGD bn)</div>
-              <canvas id="chart-fiscal" height="200"></canvas>
-            </div>
-            <div class="chart-container" style="margin-top:1rem;">
-              <div class="chart-label">Tax Revenue Buoyancy Curves &mdash; Empirical (2014&ndash;2024)</div>
-              <canvas id="chart-fiscal-buoy" height="200"></canvas>
             </div>
           </div>
         </div>
       </div>
-          <div class="tab-panel" id="ch2-quarterly"></div>
+
+          <div class="tab-panel" id="ch2-quarterly">
+        <div class="analysis-card">
+          <div class="card-header">
+            <span class="card-title">Quarterly GDP Pulse</span>
+            <span class="card-tag">High Frequency</span>
+          </div>
+          <div class="card-body">
+            <div class="nl-wrap nl-left">
+              <div class="nl-chart-col">
+                <div class="nl-chart-box" id="quarterly-chart-mount">
+                  <!-- populated by gdp-quarterly.js -->
+                </div>
+              </div>
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Explanation</div>
+                  <div class="nl-body">Quarterly GDP statistics are published in two formats that answer different questions. The <strong>year-on-year (YoY) growth rate</strong> &mdash; <code>g<sub>YoY</sub>&nbsp;=&nbsp;(Y<sub>t</sub>&nbsp;&minus;&nbsp;Y<sub>t&minus;4</sub>)/Y<sub>t&minus;4</sub></code> &mdash; compares output to the same quarter one year earlier, eliminating seasonal variation. It is the standard headline figure because it is intuitively meaningful. Its weakness is that it is a <em>lagging</em> indicator: a recession that began in Q1 will not show up fully in the YoY figure until Q4, because you are still comparing against the pre-recession base. This 3&ndash;4 quarter lag is why YoY figures often still look positive as an economy tips into contraction.</div>
+                  <div class="nl-body">The <strong>QoQ seasonally adjusted annualised rate (SAAR)</strong> &mdash; <code>g<sub>SAAR</sub>&nbsp;=&nbsp;[(Y<sub>t</sub>/Y<sub>t&minus;1</sub>)<sup>4</sup>&nbsp;&minus;&nbsp;1]&nbsp;&times;&nbsp;100</code> &mdash; is a more real-time measure. It seasonally adjusts the single-quarter rate of change and annualises it. This renders it far more volatile &mdash; Singapore&rsquo;s QoQ SAAR has ranged from &minus;40% to +45% during the pandemic &mdash; but it is the correct measure for detecting turning points. Professional cycle analysts almost always anchor their nowcasts to QoQ SAAR, supplemented by monthly indicators.</div>
+                  <div class="nl-body">Singapore complicates both measures because of the electronics cycle. Electronics accounts for roughly 40&ndash;45% of manufacturing value added, and manufacturing contributes about 20&ndash;22% of GDP. A single-industry capital expenditure cycle &mdash; driven by firms in Taiwan, South Korea, and the US &mdash; can swing Singapore&rsquo;s quarterly GDP by 1&ndash;2 percentage points independent of domestic demand. Standard seasonality adjustments do not remove this signal since the electronics cycle is global and aperiodic.</div>
+                  <div class="nl-body">MTI advance estimates, released 3&ndash;4 weeks after quarter-end, are based on partial data and have historically been revised significantly. Revisions of &plusmn;0.5pp are routine; &plusmn;1pp is not uncommon in quarters heavily influenced by electronics output. The more reliable approach is to wait for the second or third release, or to triangulate against higher-frequency export data, which is available monthly.</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Formula</div>
+                  <div class="formula-box" style="font-size:0.78rem;">
+                    g<sub>YoY</sub> = (Y<sub>t</sub> &minus; Y<sub>t&minus;4</sub>) / Y<sub>t&minus;4</sub> &nbsp;&nbsp;<span class="formula-comment">// Year-on-year (lags turning points 3&ndash;4Q)</span><br>
+                    g<sub>QoQ</sub> = Y<sub>t</sub> / Y<sub>t&minus;1</sub> &minus; 1 &nbsp;&nbsp;<span class="formula-comment">// Quarter-on-quarter (seasonally adjusted)</span><br>
+                    g<sub>SAAR</sub> = [(Y<sub>t</sub>/Y<sub>t&minus;1</sub>)<sup>4</sup> &minus; 1] &times; 100 &nbsp;&nbsp;<span class="formula-comment">// Annualised; noisier but leads YoY</span>
+                  </div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Business Insight</div>
+                  <div class="nl-body">Singapore&rsquo;s quarterly GDP is among the most volatile in the developed world by standard deviation of QoQ SAAR, running approximately twice the OECD average. This volatility is structural &mdash; a feature of a city-state specialised in tradeable, capital-intensive, cyclically sensitive sectors &mdash; and should not be interpreted as economic instability. Demand planners who use quarterly GDP directly in sales forecasting models will find their models oscillating wildly around a fundamentally stable long-run trajectory.</div>
+                  <div class="nl-body">A more robust approach for operational planning is to use a two-quarter trend in QoQ SAAR as the minimum meaningful signal of direction change. Single-quarter readings of &minus;3% or +5% should be treated as noise unless corroborated by non-manufacturing PMIs, trade data, and tourism arrivals. The MTI coincident and leading indicator series, published monthly, are better high-frequency inputs for demand signal extraction than the GDP headline itself.</div>
+                  <div class="nl-body">Singapore-listed companies with significant domestic exposure (REITs, consumer staples, telecoms) will have earnings cycles only weakly correlated with quarterly GDP headlines. Sector earnings are better modelled against lagged consumer confidence, credit growth, and employment. Conversely, for companies in the semiconductor supply chain, the quarterly GDP figure is essentially a coincident indicator of their own order books.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
     <!-- MODULE: CH3 - TRADE -->
