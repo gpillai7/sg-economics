@@ -1,54 +1,6 @@
 /**
  * js/modules/gdp-growth-acct.js
  * Growth Accounting tab — live SingStat data with Perpetual Inventory Method.
- *
- * METHODOLOGY
- * ───────────
- * Production function:  Y = A · K^α · L^(1-α)
- * Log-linearise:        ln Y = ln A + α·ln K + (1-α)·ln L
- * Differentiate:        g_Y(t) = g_A(t) + α·g_K(t) + (1-α)·g_L(t)
- * Solow residual:       TFP(t) = Δln Y(t) − α·Δln K(t) − (1-α)·Δln L(t)
- * Period average:       (1/n) · Σ TFP(t)  over all annual obs in period
- *
- * CAPITAL STOCK (Perpetual Inventory Method)
- * ──────────────────────────────────────────
- * K(t) = (1 − δ) · K(t−1) + I(t)       where I = GFCF (chained 2015$)
- * Seed: K(1960) = I(1960) / (g_I_init + δ)
- *       g_I_init = CAGR of GFCF 1960–1970
- * User controls δ via slider (3–10%), default 6%
- *
- * DATA SOURCES (SingStat, DOS updated 10/02/2026)
- * ─────────────────────────────────────────────────
- * M015721 s1   — Real GDP, Chained 2015$, Annual (1960–2025)
- * M016161 s1.1 — GFCF, Chained 2015$, Annual (1960–2025)
- * M015761 s1   — VA per Worker, Chained 2015$ (1983–2025)
- * Employment   — GDP / VA_per_worker (1983–2025)
- *                MOM historical benchmarks (1965–1982)
- *
- * INDEX.HTML CHANGES
- * ──────────────────
- * 1. Script tag (after gdp-annual.js):
- *      <script src="js/modules/gdp-growth-acct.js"></script>
- *
- * 2. initTab (~line 1961):
- *      'ch2-growth': function() { if(window.initGDPGrowthAcct) window.initGDPGrowthAcct(); },
- *
- * 3. initModule ch2 (~line 1920):
- *      ch2: () => {
- *        window.initGDPAnnual     ? window.initGDPAnnual()     : updateGDPChart();
- *        window.initGDPGrowthAcct ? window.initGDPGrowthAcct() : updateGrowthAcct();
- *        updateFiscal();
- *      },
- *
- * 4. Dropdown option (~line 734):
- *      <option value="1025">2010–2025 (Mature)</option>
- *
- * 5. Add δ slider after the α slider in ch2-growth tab HTML:
- *      <div class="ctrl-group">
- *        <label class="ctrl-label">Depreciation Rate (δ): <span id="delta-val">6%</span></label>
- *        <input type="range" class="ctrl-input" id="delta-pim"
- *               min="3" max="10" step="0.5" value="6">
- *      </div>
  */
 
 (function () {
@@ -100,7 +52,6 @@
       fetchRowBased('M015761', '1'),
     ]);
 
-    /* Employment: derived or benchmarked */
     const empMap = { ...EMP_BENCH };
     Object.keys(vapwMap).forEach(y => {
       const yr = +y;
@@ -114,14 +65,10 @@
   /* ── Perpetual Inventory Method ─────────────────────────── */
   function buildCapitalStock(gfcfMap, delta) {
     const years  = Object.keys(gfcfMap).map(Number).sort((a, b) => a - b);
-    const y0     = years[0]; // 1960
-
-    /* Seed: K_0 = I_0 / (g_I_init + δ)
-       g_I_init = CAGR of GFCF over first 10 years                     */
+    const y0     = years[0];
     const y10    = y0 + 10;
     const gIinit = (gfcfMap[y10] / gfcfMap[y0]) ** (1 / 10) - 1;
     const K      = { [y0]: gfcfMap[y0] / (gIinit + delta) };
-
     years.slice(1).forEach(t => {
       K[t] = (1 - delta) * K[t - 1] + gfcfMap[t];
     });
@@ -131,8 +78,6 @@
   /* ── Build period averages via log-differences ──────────── */
   function buildPeriods({ gdpMap, gfcfMap, empMap }, alpha, delta) {
     const K = buildCapitalStock(gfcfMap, delta);
-
-    /* Year-by-year Solow residuals */
     const annual = {};
     Object.keys(gdpMap).map(Number).sort((a, b) => a - b).forEach(t => {
       const p = t - 1;
@@ -144,12 +89,11 @@
       annual[t] = { gy, gk, gl, tfp: gy - alpha * gk - (1 - alpha) * gl };
     });
 
-    /* Period definitions */
     const defs = [
-      { key: '6580', name: '1965–1980', t0: 1966, t1: 1980 },
-      { key: '8097', name: '1980–1997', t0: 1981, t1: 1997 },
-      { key: '9710', name: '1997–2010', t0: 1998, t1: 2010 },
-      { key: '1025', name: '2010–2025', t0: 2011, t1: 2025 },
+      { key: '6580', name: '1965\u20131980', t0: 1966, t1: 1980 },
+      { key: '8097', name: '1980\u20131997', t0: 1981, t1: 1997 },
+      { key: '9710', name: '1997\u20132010', t0: 1998, t1: 2010 },
+      { key: '1025', name: '2010\u20132025', t0: 2011, t1: 2025 },
     ];
 
     const result = {};
@@ -158,18 +102,15 @@
         .filter(([t]) => +t >= t0 && +t <= t1)
         .map(([, v]) => v);
       if (!obs.length) return;
-
-      const n    = obs.length;
-      const avg  = arr => arr.reduce((s, x) => s + x, 0) / n * 100;
-
+      const n   = obs.length;
+      const avg = arr => arr.reduce((s, x) => s + x, 0) / n * 100;
       result[key] = {
         name,
         gdp:     parseFloat(avg(obs.map(v => v.gy)).toFixed(3)),
         capital: parseFloat(avg(obs.map(v => v.gk)).toFixed(3)),
         labour:  parseFloat(avg(obs.map(v => v.gl)).toFixed(3)),
         tfp:     parseFloat(avg(obs.map(v => v.tfp)).toFixed(3)),
-        n,
-        live: true,
+        n, live: true,
       };
     });
     return result;
@@ -183,22 +124,21 @@
     return parseFloat(document.getElementById('delta-pim')?.value ?? '6') / 100;
   }
 
-  /* ── Inject δ slider if not already in DOM ──────────────── */
+  /* ── Inject delta slider if missing ────────────────────── */
   function ensureDeltaSlider() {
     if (document.getElementById('delta-pim')) return;
-
     const alphaGroup = document.getElementById('alpha')?.closest('.ctrl-group');
     if (!alphaGroup) return;
-
     const div = document.createElement('div');
     div.className = 'ctrl-group';
     div.innerHTML = `
       <label class="ctrl-label">
-        Depreciation Rate (δ): <span id="delta-val">6%</span>
+        Depreciation Rate (\u03b4): <span id="delta-val">6%</span>
         <span style="font-size:.7rem;opacity:.5;margin-left:.3rem;">PIM capital stock</span>
       </label>
       <input type="range" class="ctrl-input" id="delta-pim"
-             min="3" max="10" step="0.5" value="6">`;
+             min="3" max="10" step="0.5" value="6"
+             oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">`;
     alphaGroup.insertAdjacentElement('afterend', div);
   }
 
@@ -226,33 +166,33 @@
     const alpha = getAlpha();
     const delta = getDelta();
 
-    document.getElementById('alpha-val').textContent = alpha.toFixed(2);
-    const deltaEl = document.getElementById('delta-val');
-    if (deltaEl) deltaEl.textContent = (delta * 100).toFixed(1) + '%';
+    const alphaValEl = document.getElementById('alpha-val');
+    if (alphaValEl) alphaValEl.textContent = alpha.toFixed(2);
+    const deltaValEl = document.getElementById('delta-val');
+    if (deltaValEl) deltaValEl.textContent = (delta * 100).toFixed(1) + '%';
 
-    const per = document.getElementById('growth-period').value;
+    const per = document.getElementById('growth-period')?.value;
     const d   = periods?.[per] ?? window.growthData?.[per];
     if (!d) return;
 
-    /* Re-derive contributions at current α (TFP is pre-computed at same α,
-       but cap/lab split changes with slider so recompute all three)        */
     const cap = alpha * d.capital;
     const lab = (1 - alpha) * d.labour;
     const tfp = d.gdp - cap - lab;
 
     const methodNote = d.live
       ? `<span style="font-size:.73rem;opacity:.55;margin-left:.4rem;">
-           ✓ SingStat · PIM (δ=${(delta*100).toFixed(1)}%) · Δln method · ${d.n} obs
+           \u2713 SingStat \u00b7 PIM (\u03b4=${(delta*100).toFixed(1)}%) \u00b7 \u0394ln method \u00b7 ${d.n} obs
          </span>`
       : `<span style="font-size:.73rem;opacity:.4;margin-left:.4rem;">(static fallback)</span>`;
 
-    document.getElementById('growth-result').innerHTML =
+    const resultEl = document.getElementById('growth-result');
+    if (resultEl) resultEl.innerHTML =
       `<strong>${d.name}</strong>${methodNote}<br>` +
       `g_Y: <span class="result-highlight">${d.gdp.toFixed(2)}%</span> &nbsp;|&nbsp; ` +
       `g_K <small>(PIM)</small>: ${d.capital.toFixed(2)}% &nbsp;|&nbsp; ` +
       `g_L: ${d.labour.toFixed(2)}%<br>` +
-      `Capital (α·g_K): ${cap.toFixed(2)}pp &nbsp;|&nbsp; ` +
-      `Labour ((1−α)·g_L): ${lab.toFixed(2)}pp &nbsp;|&nbsp; ` +
+      `Capital (\u03b1\u00b7g_K): ${cap.toFixed(2)}pp &nbsp;|&nbsp; ` +
+      `Labour ((1\u2212\u03b1)\u00b7g_L): ${lab.toFixed(2)}pp &nbsp;|&nbsp; ` +
       `<strong>TFP: ${tfp.toFixed(2)}pp (${(tfp / d.gdp * 100).toFixed(0)}% of growth)</strong>`;
 
     mkChart('chart-growth-acct', {
@@ -278,10 +218,7 @@
           tooltip: { callbacks: { label: c => `${parseFloat(c.raw).toFixed(2)}pp` } },
         },
         scales: {
-          x: {
-            title: { display: true, text: 'Percentage Points (pp)' },
-            grid:  { color: 'rgba(0,0,0,0.06)' },
-          },
+          x: { title: { display: true, text: 'Percentage Points (pp)' }, grid: { color: 'rgba(0,0,0,0.06)' } },
           y: { grid: { display: false } },
         },
       },
@@ -289,63 +226,65 @@
   }
 
   /* ── State ──────────────────────────────────────────────── */
-  let _livePeriods = null;
-  let _rawCache    = null;
+  let _livePeriods      = null;
+  let _rawCache         = null;
+  let _listenersAdded   = false;
+  let _initStarted      = false;
 
-  /* ── Recompute periods at current α and δ ───────────────── */
+  /* ── Recompute: always renders, falls back to static if no live data ── */
   function recompute() {
-    if (!_rawCache) return;
+    if (!_rawCache) {
+      render(window.growthData);  // static fallback — sliders still update labels + chart
+      return;
+    }
     _livePeriods = buildPeriods(_rawCache, getAlpha(), getDelta());
     if (window.growthData) Object.assign(window.growthData, _livePeriods);
     render(_livePeriods);
   }
 
-  /* ── Attach all listeners ───────────────────────────────── */
+  /* ── Attach listeners once only ────────────────────────── */
   function attachListeners() {
+    if (_listenersAdded) return;
+    _listenersAdded = true;
     const alphaEl  = document.getElementById('alpha');
     const periodEl = document.getElementById('growth-period');
     const deltaEl  = document.getElementById('delta-pim');
-
-    if (alphaEl)  { alphaEl.removeAttribute('oninput');   alphaEl.addEventListener('input',  recompute); }
-    if (periodEl) { periodEl.removeAttribute('onchange'); periodEl.addEventListener('change', recompute); }
-    if (deltaEl)  { deltaEl.addEventListener('input', recompute); }
+    if (alphaEl)  alphaEl.addEventListener('input',  recompute);
+    if (periodEl) periodEl.addEventListener('change', recompute);
+    if (deltaEl)  deltaEl.addEventListener('input',  recompute);
   }
 
-  /* ── Public init ────────────────────────────────────────── */
+  /* ── Public init (idempotent) ───────────────────────────── */
   window.initGDPGrowthAcct = async function () {
     ensureDeltaSlider();
     attachListeners();
-    render(null); // immediate static render while fetch runs
+
+    // On re-visits just re-render with existing data
+    if (_initStarted) {
+      render(_livePeriods ?? window.growthData);
+      return;
+    }
+    _initStarted = true;
+
+    render(window.growthData); // show static immediately
 
     try {
       _rawCache    = await loadSeries();
       _livePeriods = buildPeriods(_rawCache, getAlpha(), getDelta());
-
       if (window.growthData) Object.assign(window.growthData, _livePeriods);
-
-      /* Update dropdown */
-      const sel = document.getElementById('growth-period');
-      if (sel) {
-        Array.from(sel.options).forEach(opt => {
-          if (opt.value === '1023') { opt.value = '1025'; opt.text = '2010–2025 (Mature)'; }
-        });
-        if (sel.value === '1023') sel.value = '1025';
-      }
-
       render(_livePeriods);
       setStatus(
-        '✓ SingStat · PIM capital stock · Δln Solow residual · M015721 · M016161 · M015761 · DOS 10/02/2026'
+        '\u2713 SingStat \u00b7 PIM capital stock \u00b7 \u0394ln Solow residual \u00b7 M015721 \u00b7 M016161 \u00b7 M015761 \u00b7 DOS 10/02/2026'
       );
-
     } catch (err) {
       console.warn('[gdp-growth-acct] API error, falling back to static:', err.message);
-      setStatus('⚠ Using static data — ' + err.message, true);
+      setStatus('\u26a0 Using static data \u2014 ' + err.message, true);
       if (_staticFallback) _staticFallback();
     }
   };
 
-  /* ── Global overwrite ───────────────────────────────────── */
-  window.updateGrowthAcct    = function () { render(_livePeriods); };
+  /* ── Global exports ─────────────────────────────────────── */
+  window.updateGrowthAcct    = function () { render(_livePeriods ?? window.growthData); };
   window.recomputeGrowthAcct = recompute;
 
 })();
