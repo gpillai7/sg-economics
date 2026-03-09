@@ -967,113 +967,170 @@
     <!-- MODULE: CH3 - TRADE -->
     <div class="module" id="mod-ch3">
       <div class="module-header">
-        <div class="module-part">Economic Policies</div>
-        <h2 class="module-title">Trade & Investment:<br>Measuring External Dependency</h2>
-        <p class="module-intro">Singapore's trade statistics require careful adjustment. Jayaram & He (2009) showed that conventional export-to-GDP ratios overstate external dependency. This module reproduces the import-adjusted method and global value chain analysis.</p>
+        <div class="module-part">Trade &amp; External Sector</div>
+        <h2 class="module-title">Trade &amp; Investment:<br>Singapore's External Exposure, 1960–Present</h2>
+        <p class="module-intro">Real merchandise trade decomposition, trade openness analysis, import-adjusted export dependency, trading partner concentration, and FDI stock measurement. Each tab links live World Bank and SingStat data to the underlying analytical framework.</p>
       </div>
 
       <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('ch3','import-adj',event)">Import-Adjusted Method</button>
-        <button class="tab-btn" onclick="switchTab('ch3','gvc',event)">Global Value Chains</button>
-        <button class="tab-btn" onclick="switchTab('ch3','fdi',event)">FDI Analysis</button>
+        <button class="tab-btn active" onclick="switchTab('ch3','trade-openness',event)">Trade Openness</button>
+        <button class="tab-btn" onclick="switchTab('ch3','partners',event)">Trading Partners</button>
+        <button class="tab-btn" onclick="switchTab('ch3','fdi-panel',event)">FDI Flows &amp; Stock</button>
       </div>
 
-      <div class="tab-panel active" id="ch3-import-adj">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">Conventional vs Import-Adjusted Export Dependence</span>
-            <span class="card-tag">Jayaram & He (2009)</span>
+      <!-- TAB 1: TRADE OPENNESS -->
+      <div class="tab-panel active" id="ch3-trade-openness">
+        <div class="nl-wrap">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Trade Openness &amp; Structure</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Singapore's Trade Openness: 322% of GDP</h3>
+              <p class="nl-body">Singapore's trade openness ratio — (exports + imports) as a share of GDP — stood at 322% in 2024, the highest among comparable economies. Germany registers 79%, South Korea 85%, Malaysia 137%. The USA, a large continental economy, sits at 25%.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Why the ratio exceeds 100%</div>
+              <p class="nl-body">A trade openness ratio above 100% reflects re-exports passing through Singapore without significant domestic value-added. Roughly half of all merchandise exports are re-exports. This means the denominator (GDP) captures only domestic value creation while the numerator (gross trade) counts pass-through volumes. The Jayaram &amp; He (2009) import-adjusted method corrects for this.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Import-Adjusted Dependency</div>
+              <p class="nl-body">Strip out re-exports (~50% of gross exports) and the import content of domestic exports (~63%), and Singapore's true external dependency falls from the headline 322% to an estimated 50–60% of GDP — still high but in line with other open economies. Use the sliders below to explore the sensitivity.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Interactive: Import-Adjusted Method</div>
+              <div class="controls" style="margin-top:8px">
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Gross Exports (SGD Bn): <span id="ch3-ia-exp-val">700</span></label>
+                  <input type="range" class="ctrl-input" id="ch3-ia-exp" min="400" max="900" step="10" value="700">
+                </div>
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Re-export Share: <span id="ch3-ia-reexp-val">50</span>%</label>
+                  <input type="range" class="ctrl-input" id="ch3-ia-reexp" min="30" max="70" step="1" value="50">
+                </div>
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Import Content of Dom. Exports: <span id="ch3-ia-impcont-val">63</span>%</label>
+                  <input type="range" class="ctrl-input" id="ch3-ia-impcont" min="40" max="80" step="1" value="63">
+                </div>
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Nominal GDP (SGD Bn): <span id="ch3-ia-gdp-val">680</span></label>
+                  <input type="range" class="ctrl-input" id="ch3-ia-gdp" min="400" max="900" step="10" value="680">
+                </div>
+              </div>
+              <div class="result-box" id="ch3-ia-result" style="margin-top:10px"></div>
+              <div class="nl-chart-box" style="margin-top:12px;position:static">
+                <div class="chart-label">Conventional vs Import-Adjusted Dependency (%)</div>
+                <canvas id="ch3-ia-bar" height="160"></canvas>
+              </div>
+            </div>
+            <div class="callout insight" style="margin-top:16px">
+              <div class="callout-label">📖 Jayaram &amp; He (2009)</div>
+              The landmark MAS study found import-adjusted dependency of ~51% (2000) — about 18 percentage points below the conventional measure. High-tech exports (59% of manufactured exports in 2024) signal rising domestic value-added over time.
+            </div>
           </div>
-          <div class="card-body">
-            <div class="card-desc">The conventional method (gross exports / total demand) overstates reliance on external demand because: (1) re-exports have low value-added, (2) domestic exports have high import content. The import-adjusted method strips these out.</div>
-            <div class="formula-box">
-              Conventional = Gross Exports / (GDP + Imports)<br><br>
-              Import-Adjusted = (Domestic Exports - Import Content) / GDP<br>
-              <span class="formula-comment">// Import content of exports ≈ 60–70% for Singapore</span>
+          <div class="nl-chart-col">
+            <div id="ch3-openness-kpi"></div>
+            <div class="nl-chart-box">
+              <div class="chart-label">Singapore Trade Openness 1980–2024 (% of GDP)</div>
+              <canvas id="ch3-openness-line" height="220"></canvas>
             </div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">Gross Exports (SGD Bn): <span id="exp-val">700</span></label>
-                <input type="range" class="ctrl-input" id="exp-slider" min="200" max="1000" step="10" value="700" oninput="updateTrade()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Re-export Share (%): <span id="reexp-val">50</span>%</label>
-                <input type="range" class="ctrl-input" id="reexp-slider" min="30" max="70" step="1" value="50" oninput="updateTrade()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Import Content (%): <span id="impcont-val">63</span>%</label>
-                <input type="range" class="ctrl-input" id="impcont-slider" min="40" max="80" step="1" value="63" oninput="updateTrade()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">GDP (SGD Bn): <span id="tradegdp-val">500</span></label>
-                <input type="range" class="ctrl-input" id="tradegdp-slider" min="200" max="700" step="10" value="500" oninput="updateTrade()">
-              </div>
-            </div>
-            <div class="result-box" id="trade-result"></div>
-            <div class="chart-container">
-              <div class="chart-label">Dependency Ratio Comparison</div>
-              <canvas id="chart-trade" height="200"></canvas>
-            </div>
-            <div class="callout finding">
-              <div class="callout-label">📊 Textbook Finding (2000–2008)</div>
-              Conventional method: 69.4% (2000) → 73.9% (2008)<br>
-              Import-adjusted: 51.3% (2000) → 55.6% (2008)<br>
-              The gap of ~18pp represents double-counting from re-exports and import content.
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">Peer Comparison: Trade Openness 2024</div>
+              <canvas id="ch3-openness-peers" height="200"></canvas>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-panel" id="ch3-gvc">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">Global Value Chain Decomposition</span>
-            <span class="card-tag">Zhou, Lim & Feng (2016)</span>
+      <!-- TAB 2: TRADING PARTNERS -->
+      <div class="tab-panel" id="ch3-partners">
+        <div class="nl-wrap nl-left">
+          <div class="nl-chart-col">
+            <div class="nl-chart-box">
+              <div class="chart-label">Merchandise Exports by Region (SGD Billion)</div>
+              <canvas id="ch3-partners-region" height="260"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">Top 8 Markets: 2010 vs 2024 (SGD Billion)</div>
+              <canvas id="ch3-partners-top" height="240"></canvas>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="card-desc">Foreign final demand accounts for ~66% of Singapore's GDP. But only ¼ of this came from direct exports to final markets — the other ¾ served final demand indirectly through GVCs. This reflects Singapore's role as an intermediate hub.</div>
-            <div class="chart-container">
-              <div class="chart-label">Sources of Final Demand for Singapore's Output (2015)</div>
-              <canvas id="chart-gvc" height="240"></canvas>
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Geographic Concentration</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Asia Accounts for 74% of Exports</h3>
+              <p class="nl-body">In 2024, Asia absorbed SGD 496B of Singapore's SGD 675B total merchandise exports — 74% of the total. The region's dominance has been structural since independence but its composition has shifted dramatically: China's share rose from under 7% in 2005 to over 14% in 2024, while Japan's slipped from 5.4% to 3.5%.</p>
             </div>
-            <div class="callout finding">
-              <div class="callout-label">📊 Key Shift (2005–2015)</div>
-              China + ASEAN-5 overtook Eurozone + US as Singapore's top foreign final demand markets, reflecting rapid Asian development. China's share rose from ~4.6% to ~7.4% of Singapore's GDP.
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Re-export Distortion</div>
+              <p class="nl-body">Singapore's role as a regional hub distorts bilateral trade figures. Hong Kong, which absorbs SGD 74B (11%), is primarily a conduit for onward shipment to Mainland China. Similarly, a portion of Malaysian and Indonesian trade represents transit via Singapore's port. Adjusting for re-exports materially reduces apparent bilateral surpluses.</p>
             </div>
-            <div class="chart-container">
-              <div class="chart-label">Top Final Demand Sources as % of Singapore GDP (2015 est.)</div>
-              <canvas id="chart-gvc2" height="220"></canvas>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">USA Rising, Japan Falling</div>
+              <p class="nl-body">The United States has become a more significant direct destination — SGD 58B in 2024 versus SGD 31B in 2010 — driven by semiconductor equipment and pharmaceutical exports. Japan's share has compressed as its economy stagnated. Korea and Taiwan have risen sharply, reflecting semiconductor supply-chain deepening.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Commodity Concentration Risk</div>
+              <p class="nl-body">Electronics and chemicals together account for roughly 70% of domestic exports. This makes Singapore's external position highly sensitive to the global semiconductor cycle. The 2022 export spike (SGD 710B) reflects post-COVID electronics demand; the 2023 correction (SGD 638B) reflects the semiconductor down-cycle.</p>
+            </div>
+            <div class="callout insight" style="margin-top:16px">
+              <div class="callout-label">📊 GVC Hub Role</div>
+              Singapore sits at the centre of the Asian semiconductor GVC — importing wafers and chemicals, adding precision manufacturing, and re-exporting to final markets in China, the USA and Europe. Re-exports account for ~50% of gross merchandise exports by value.
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-panel" id="ch3-fdi">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">FDI Attraction & Spillover Model</span>
-            <span class="card-tag">Investment Policy</span>
-          </div>
-          <div class="card-body">
-            <div class="card-desc">Singapore attracts FDI through competitive tax rates, rule of law, and skilled labour. Inward FDI generates spillovers to domestic firms. Outward FDI supports diversification and income from overseas investments.</div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">Corporate Tax Rate (%): <span id="cit-val">17</span>%</label>
-                <input type="range" class="ctrl-input" id="cit-slider" min="5" max="35" step="1" value="17" oninput="updateFDI()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Skills Index (0–100): <span id="skills-val">85</span></label>
-                <input type="range" class="ctrl-input" id="skills-slider" min="40" max="100" step="1" value="85" oninput="updateFDI()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Rule of Law (0–100): <span id="rol-val">95</span></label>
-                <input type="range" class="ctrl-input" id="rol-slider" min="40" max="100" step="1" value="95" oninput="updateFDI()">
-              </div>
+      <!-- TAB 3: FDI FLOWS & STOCK -->
+      <div class="tab-panel" id="ch3-fdi-panel">
+        <div class="nl-wrap">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">FDI Flows &amp; Inward Stock</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">SGD 2.8 Trillion Inward Stock: ~415% of GDP</h3>
+              <p class="nl-body">Singapore's inward FDI stock reached SGD 2.82 trillion in 2024, equivalent to roughly 415% of GDP. FDI inflows as a share of GDP averaged 23% annually over 2013–2024 — compared to 2–4% for Germany and under 2% for South Korea. No major economy of comparable size attracts FDI at this intensity.</p>
             </div>
-            <div class="result-box" id="fdi-result"></div>
-            <div class="chart-container">
-              <div class="chart-label">FDI Attractiveness vs Corporate Tax Rate</div>
-              <canvas id="chart-fdi" height="200"></canvas>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Why Singapore Attracts FDI</div>
+              <p class="nl-body">Three structural factors dominate: (1) a corporate tax rate of 17% with extensive treaty network and IP incentive regimes, driving effective rates well below statutory; (2) ranked 1st globally for rule of law and contract enforcement — critical for IP-intensive industries; (3) a concentration of English-speaking STEM talent in a time-zone bridging Asia and Europe.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Source Economy Composition</div>
+              <p class="nl-body">The United States is by far the largest source (SGD 719B, 25% of total stock), reflecting US MNC regional headquarters concentration. Japan (SGD 189B) and the UK (SGD 153B) rank 2nd and 3rd. Luxembourg and Netherlands feature prominently due to holding-company structures — they often represent ultimate beneficial ownership in Germany, France, and elsewhere. Round-tripping through offshore centres can inflate stated stock relative to operational investment.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Rising Asian Sources</div>
+              <p class="nl-body">Mainland China's stock grew from SGD 22B (2015) to SGD 74B (2024), a 3.4× increase, as Chinese MNCs establish ASEAN regional bases in Singapore to de-risk supply chains and access Western capital markets. South Korea rose from SGD 9B to SGD 50B over the same period, driven by semiconductor and consumer electronics firms.</p>
+            </div>
+            <div class="callout insight" style="margin-top:16px">
+              <div class="callout-label">📊 Data Caveat</div>
+              FDI stock data from SingStat M083011 is in SGD millions, annual, from 1990. Source economy breakdown covers 2015–2024. Luxembourg and Netherlands figures include pass-through holding structures — ultimate beneficial owner data is not publicly available.
+            </div>
+          </div>
+          <div class="nl-chart-col">
+            <div id="ch3-fdi-kpi"></div>
+            <div class="nl-chart-box">
+              <div class="chart-label">FDI Inflows as % of GDP — SGP vs Peers</div>
+              <canvas id="ch3-fdi-inflows" height="200"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">Inward FDI Stock: SGD Billion (2000–2024)</div>
+              <canvas id="ch3-fdi-stock" height="180"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">Top 10 Source Economies, 2024 (SGD Bn)</div>
+              <canvas id="ch3-fdi-sources" height="220"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">FDI Stock Trends by Source, 2015–2024</div>
+              <canvas id="ch3-fdi-trend" height="200"></canvas>
             </div>
           </div>
         </div>
@@ -2103,6 +2160,7 @@ function showPart(part) {
 function initModule(id) {
   const inits = {
     ch2: () => { window.initGDPAnnual ? window.initGDPAnnual() : updateGDPChart(); window.initGDPGrowthAcct ? window.initGDPGrowthAcct() : updateGrowthAcct(); window.initFiscal ? window.initFiscal() : updateFiscal(); },
+    ch3: () => { if(window.initTrade) window.initTrade(); },
     ch7: () => { updateMincer(); },
     ch8: () => { updateGini(); updateLorenz(); initGatsby(); updateIGM(); },
     ch9: () => { updateDivorce(); },
@@ -2117,9 +2175,9 @@ function initModule(id) {
 
 function initTab(ch, tab) {
   const inits = {
-    'ch3-import-adj': updateTrade,
-    'ch3-gvc': initGVC,
-    'ch3-fdi': updateFDI,
+    'ch3-trade-openness': function() { if(window.initTradeOpenness) window.initTradeOpenness(); },
+    'ch3-partners':       function() { if(window.initTradingPartners) window.initTradingPartners(); },
+    'ch3-fdi-panel':      function() { if(window.initFDI_ch3) window.initFDI_ch3(); },
     'ch4-tfp': updateTFP,
     'ch4-rd': updateRD,
     'ch4-sectors': initSectors,
@@ -3216,5 +3274,6 @@ window.addEventListener('DOMContentLoaded', () => {
 <script src="js/modules/gdp-growth-acct.js"></script>
 <script src="js/modules/gdp-fiscal.js"></script>
 <script src="js/modules/gdp-quarterly.js"></script>
+<script src="js/modules/trade.js"></script>
 </body>
 </html>
