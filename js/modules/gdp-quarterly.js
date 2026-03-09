@@ -28,81 +28,75 @@
   const RESOURCE_ID = 'M015631';
   const SERIES_NO   = 2;           // Real GDP YoY growth, chained 2015 $
   const PANEL_ID    = 'ch2-quarterly';
+  const MOUNT_ID    = 'quarterly-chart-mount';
   const CHART_ID    = 'chart-gdp-quarterly';
   const CHART_ID_MOM = 'chart-gdp-qoq';
 
   /* ── Inject HTML into the panel on first load ────────────── */
   function buildPanel() {
     const panel = document.getElementById(PANEL_ID);
-    if (!panel || panel.dataset.built) return;
-    panel.dataset.built = '1';
+    if (!panel) return;
+    // Inject into the newsletter mount point if present, else fall back to panel
+    const mount = document.getElementById(MOUNT_ID) || panel;
+    if (mount.dataset.built) return;
+    mount.dataset.built = '1';
 
-    panel.innerHTML = `
-      <div class="analysis-card">
-        <div class="card-header">
-          <span class="card-title">Singapore GDP — Quarterly Pulse</span>
-          <span class="card-tag" id="q-last-updated">Loading…</span>
+    mount.innerHTML = `
+      <div class="chart-label" id="q-last-updated" style="margin-bottom:8px;">Loading&hellip;</div>
+
+      <!-- KPI strip -->
+      <div id="q-kpi-strip" style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:1rem;">
+        <div class="kpi-card" id="kpi-latest"></div>
+        <div class="kpi-card" id="kpi-prev"></div>
+        <div class="kpi-card" id="kpi-yago"></div>
+        <div class="kpi-card" id="kpi-avg4"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls" style="margin-bottom:.75rem;flex-direction:column;gap:8px;">
+        <div class="ctrl-group">
+          <label class="ctrl-label">View</label>
+          <select class="ctrl-select" id="q-view">
+            <option value="yoy">Year-on-Year (%)</option>
+            <option value="trend">4-Quarter Rolling Avg</option>
+          </select>
         </div>
-        <div class="card-body">
-
-          <!-- KPI strip -->
-          <div id="q-kpi-strip" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem;">
-            <div class="kpi-card" id="kpi-latest"></div>
-            <div class="kpi-card" id="kpi-prev"></div>
-            <div class="kpi-card" id="kpi-yago"></div>
-            <div class="kpi-card" id="kpi-avg4"></div>
-          </div>
-
-          <!-- Controls -->
-          <div class="controls" style="margin-bottom:.75rem;">
-            <div class="ctrl-group">
-              <label class="ctrl-label">View</label>
-              <select class="ctrl-select" id="q-view">
-                <option value="yoy">Year-on-Year (%)</option>
-                <option value="trend">4-Quarter Rolling Avg</option>
-              </select>
-            </div>
-            <div class="ctrl-group">
-              <label class="ctrl-label">Period</label>
-              <select class="ctrl-select" id="q-period">
-                <option value="10">Last 10 years</option>
-                <option value="20">Last 20 years</option>
-                <option value="all">All available</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- YoY chart -->
-          <div class="chart-container">
-            <div class="chart-label" id="q-chart-label">Real GDP Growth Rate — Year-on-Year (%)</div>
-            <canvas id="${CHART_ID}" height="260"></canvas>
-          </div>
-
-          <!-- Recession signal strip -->
-          <div style="margin-top:.5rem;margin-bottom:1rem;">
-            <div class="chart-label" style="margin-bottom:.4rem;">Quarter-by-quarter momentum signal</div>
-            <div id="q-signal-strip" style="display:flex;flex-wrap:wrap;gap:3px;"></div>
-            <div style="display:flex;gap:1rem;margin-top:.4rem;font-size:.7rem;opacity:.6;">
-              <span>🟢 Accelerating (&gt;3%)</span>
-              <span>🟡 Moderate (0–3%)</span>
-              <span>🔴 Contraction (&lt;0%)</span>
-            </div>
-          </div>
-
-          <!-- Source -->
-          <div class="chart-label" style="margin-top:.5rem;">
-            Source: <a href="https://tablebuilder.singstat.gov.sg/table/TS/M015631"
-            target="_blank" rel="noopener" style="color:inherit;">SingStat M015631</a>
-            — GDP Year on Year Growth Rate, Quarterly (Chained 2015 $)
-          </div>
-
-          <!-- Business callout -->
-          <div class="callout finding" style="margin-top:1rem;">
-            <div class="callout-label">💼 Business Signal</div>
-            <div id="q-business-signal">Loading latest quarter analysis…</div>
-          </div>
-
+        <div class="ctrl-group">
+          <label class="ctrl-label">Period</label>
+          <select class="ctrl-select" id="q-period">
+            <option value="10">Last 10 years</option>
+            <option value="20">Last 20 years</option>
+            <option value="all">All available</option>
+          </select>
         </div>
+      </div>
+
+      <!-- YoY chart -->
+      <div class="chart-label" id="q-chart-label">Real GDP Growth Rate — Year-on-Year (%)</div>
+      <canvas id="${CHART_ID}" height="220"></canvas>
+
+      <!-- Recession signal strip -->
+      <div style="margin-top:.75rem;margin-bottom:.75rem;">
+        <div class="chart-label" style="margin-bottom:.4rem;">Quarter-by-quarter momentum signal</div>
+        <div id="q-signal-strip" style="display:flex;flex-wrap:wrap;gap:3px;"></div>
+        <div style="display:flex;gap:1rem;margin-top:.4rem;font-size:.7rem;opacity:.6;">
+          <span>🟢 Accelerating (&gt;3%)</span>
+          <span>🟡 Moderate (0–3%)</span>
+          <span>🔴 Contraction (&lt;0%)</span>
+        </div>
+      </div>
+
+      <!-- Source -->
+      <div class="chart-label" style="margin-top:.5rem;">
+        Source: <a href="https://tablebuilder.singstat.gov.sg/table/TS/M015631"
+        target="_blank" rel="noopener" style="color:inherit;">SingStat M015631</a>
+        — GDP YoY Growth Rate, Quarterly (Chained 2015 $)
+      </div>
+
+      <!-- Business callout -->
+      <div class="callout finding" style="margin-top:.75rem;">
+        <div class="callout-label">💼 Business Signal</div>
+        <div id="q-business-signal">Loading latest quarter analysis…</div>
       </div>
     `;
 
