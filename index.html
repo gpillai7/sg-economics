@@ -1917,7 +1917,7 @@ function showPart(part) {
 
 function initModule(id) {
   const inits = {
-    ch2: () => { updateGDPChart(); updateGrowthAcct(); updateFiscal(); },
+    ch2: () => { window.initGDPAnnual ? window.initGDPAnnual() : updateGDPChart(); updateGrowthAcct(); updateFiscal(); },
     ch3: () => { updateTrade(); initGVC(); updateFDI(); },
     ch4: () => { updateTFP(); updateRD(); initSectors(); },
     ch5: () => { updateSectors(); initShiftShare(); },
@@ -1959,6 +1959,7 @@ function initTab(ch, tab) {
     'ch14-fppt': updateFPPT,
     'ch14-coe': updateCOE,
     'ch2-quarterly': function() { if(window.initGDPQuarterly) window.initGDPQuarterly(); },
+    'ch2-gdp':       function() { if(window.initGDPAnnual)    window.initGDPAnnual();    },
   };
   inits[`${ch}-${tab}`]?.();
 }
