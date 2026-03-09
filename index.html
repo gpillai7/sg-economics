@@ -1925,10 +1925,6 @@ function showPart(part) {
 function initModule(id) {
   const inits = {
     ch2: () => { window.initGDPAnnual ? window.initGDPAnnual() : updateGDPChart(); window.initGDPGrowthAcct ? window.initGDPGrowthAcct() : updateGrowthAcct(); updateFiscal(); },
-    ch3: () => { updateTrade(); initGVC(); updateFDI(); },
-    ch4: () => { updateTFP(); updateRD(); initSectors(); },
-    ch5: () => { updateSectors(); initShiftShare(); },
-    ch6: () => { initEnterprise(); simulateFirms(); },
     ch7: () => { updateMincer(); },
     ch8: () => { updateGini(); updateLorenz(); initGatsby(); updateIGM(); },
     ch9: () => { updateDivorce(); },
