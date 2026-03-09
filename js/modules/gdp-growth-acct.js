@@ -129,9 +129,15 @@
     LOG('renderChart called — hidden:', hidden, 'tfp:', tfp.toFixed(2), 'cap:', cap.toFixed(2), 'lab:', lab.toFixed(2));
     if(hidden) { LOG('panel hidden, skipping draw'); return; }
 
-    // Always destroy any existing Chart.js instance on this canvas before creating new one
+    // Destroy via window.charts (used by static mkChart fallback)
+    if(window.charts && window.charts['chart-growth-acct']){
+      LOG('destroying via window.charts');
+      window.charts['chart-growth-acct'].destroy();
+      delete window.charts['chart-growth-acct'];
+    }
+    // Also destroy any instance Chart.js is tracking directly
     const existing = Chart.getChart(canvas);
-    if(existing){ LOG('destroying existing chart'); existing.destroy(); }
+    if(existing){ LOG('destroying via Chart.getChart'); existing.destroy(); }
 
     LOG('creating new Chart.js instance');
     new Chart(canvas, {
