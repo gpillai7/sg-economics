@@ -23,33 +23,17 @@
     1980:1159e3,1981:1198e3,1982:1229e3,
   };
 
-  async function fetchRowBased(resourceId, seriesNo) {
-    const cacheKey = `singstat_row_${resourceId}_${seriesNo}`;
-    const cached = SGEcoCache.get(cacheKey);
-    if (cached) return cached;
-    const res  = await fetch(`https://tablebuilder.singstat.gov.sg/api/table/tabledata/${resourceId}`,
-      { headers: { 'Content-Type': 'application/json' } });
-    const data = (await res.json())?.Data ?? {};
-    const row  = (data.row ?? []).find(r => r.seriesNo === seriesNo);
-    if (!row) throw new Error(`Series ${seriesNo} not found in ${resourceId}`);
-    const map = {};
-    (row.columns ?? []).forEach(c => {
-      const y = parseInt(c.key,10), v = parseFloat(c.value);
-      if (!isNaN(y) && !isNaN(v)) map[y] = v;
-    });
-    SGEcoCache.set(cacheKey, map);
-    return map;
-  }
-
   let _rawSeries = null;
   async function loadSeries() {
     if (_rawSeries) return _rawSeries;
-    const [gdpMap,gfcfMap,vapwMap] = await Promise.all([
-      fetchRowBased('M015721','1'),
-      fetchRowBased('M016161','1.1'),
-      fetchRowBased('M015761','1'),
-    ]);
-    const empMap = { ...EMP_BENCH };
+    const cacheKey = 'singstat_growth_bundle';
+    const cached = SGEcoCache.get(cacheKey);
+    const bundle = cached ?? await fetch('data/singstat-growth.json').then(r => r.json());
+    if (!cached) SGEcoCache.set(cacheKey, bundle);
+    const gdpMap  = Object.fromEntries(Object.entries(bundle.gdp).map(([k,v])=>[+k,v]));
+    const gfcfMap = Object.fromEntries(Object.entries(bundle.gfcf).map(([k,v])=>[+k,v]));
+    const vapwMap = Object.fromEntries(Object.entries(bundle.vapw).map(([k,v])=>[+k,v]));
+    const empMap  = { ...EMP_BENCH };
     Object.keys(vapwMap).forEach(y => {
       const yr=+y;
       if (gdpMap[yr]&&vapwMap[yr]) empMap[yr]=(gdpMap[yr]*1e6)/vapwMap[yr];
