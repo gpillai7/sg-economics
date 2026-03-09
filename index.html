@@ -1958,6 +1958,8 @@ function initTab(ch, tab) {
     'ch14-erp': initERP,
     'ch14-fppt': updateFPPT,
     'ch14-coe': updateCOE,
+    'ch2-quarterly': function() { if(window.initGDPQuarterly) window.initGDPQuarterly(); },
+    'ch2-sectors':   function() { if(window.initGDPSectors)   window.initGDPSectors();   },
   };
   inits[`${ch}-${tab}`]?.();
 }
