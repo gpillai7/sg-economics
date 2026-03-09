@@ -727,12 +727,12 @@
               </div>
               <div class="ctrl-group">
                 <label class="ctrl-label">Period</label>
-                <!-- After the α slider ctrl-group, inside ch2-growth tab -->
                   <div class="ctrl-group">
                   <label class="ctrl-label">Depreciation Rate (δ): <span id="delta-val">6%</span>
                   <span style="font-size:.7rem;opacity:.5;margin-left:.3rem;">PIM capital stock</span>
                   </label>
-                  <input type="range" class="ctrl-input" id="delta-pim" min="3" max="10" step="0.5" value="6">
+                    <input type="range" class="ctrl-input" id="delta-pim" min="3" max="10" step="0.5" value="6"
+                     oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct()">
                   </div>
                 <select class="ctrl-select" id="growth-period" onchange="updateGrowthAcct()">
                   <option value="6580">1965–1980 (Early)</option>
