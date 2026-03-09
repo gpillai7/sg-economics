@@ -345,6 +345,7 @@
   };
 
   /* ── Global overwrite ───────────────────────────────────── */
-  window.updateGrowthAcct = function () { render(_livePeriods); };
+  window.updateGrowthAcct    = function () { render(_livePeriods); };
+  window.recomputeGrowthAcct = recompute;
 
 })();
