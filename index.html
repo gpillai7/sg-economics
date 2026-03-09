@@ -723,8 +723,9 @@
             <div class="controls">
               <div class="ctrl-group">
                 <label class="ctrl-label">Capital Share (α): <span id="alpha-val">0.40</span></label>
-                oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();"
-            </div>
+                <input type="range" class="ctrl-input" id="alpha" min="0.25" max="0.55" step="0.01" value="0.40"
+                  oninput="if(window.recomputeGrowthAcct) recomputeGrowthAcct(); else updateGrowthAcct();">
+              </div>
               <div class="ctrl-group">
                 <label class="ctrl-label">Depreciation Rate (δ): <span id="delta-val">6%</span>
                   <span style="font-size:.7rem;opacity:.5;margin-left:.3rem;">PIM capital stock</span>
