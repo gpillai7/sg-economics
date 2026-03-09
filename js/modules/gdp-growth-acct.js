@@ -122,46 +122,33 @@
   }
 
   function renderChart(tfp, cap, lab) {
-    const canvas=document.getElementById('chart-growth-acct');
-    if(!canvas){ LOG('canvas not found'); return; }
-
-    const hidden = canvas.offsetParent===null || canvas.closest('.tab-panel')?.style.display==='none';
-    LOG('renderChart called — hidden:', hidden, 'tfp:', tfp.toFixed(2), 'cap:', cap.toFixed(2), 'lab:', lab.toFixed(2));
-    if(hidden) { LOG('panel hidden, skipping draw'); return; }
-
-    // Destroy via window.charts (used by static mkChart fallback)
-    if(window.charts && window.charts['chart-growth-acct']){
-      LOG('destroying via window.charts');
-      window.charts['chart-growth-acct'].destroy();
-      delete window.charts['chart-growth-acct'];
-    }
-    // Also destroy any instance Chart.js is tracking directly
-    const existing = Chart.getChart(canvas);
-    if(existing){ LOG('destroying via Chart.getChart'); existing.destroy(); }
-
-    LOG('creating new Chart.js instance');
-    new Chart(canvas, {
-      type:'bar',
-      data:{
-        labels:['TFP','Capital','Labour'],
-        datasets:[{
-          label:'Contribution (pp)',
-          data:[parseFloat(tfp.toFixed(3)),parseFloat(cap.toFixed(3)),parseFloat(lab.toFixed(3))],
-          backgroundColor:['rgba(200,57,43,0.85)','rgba(26,82,118,0.85)','rgba(212,160,23,0.85)'],
-          borderWidth:0,
-        }],
-      },
-      options:{
-        responsive:true,indexAxis:'y',
-        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${parseFloat(c.raw).toFixed(2)}pp`}}},
-        scales:{
-          x:{title:{display:true,text:'Percentage Points (pp)'},grid:{color:'rgba(0,0,0,0.06)'}},
-          y:{grid:{display:false}},
+    LOG('renderChart tfp='+tfp.toFixed(2)+' cap='+cap.toFixed(2)+' lab='+lab.toFixed(2));
+    // Use the global mkChart helper which handles destroy+create via window.charts
+    try {
+      mkChart('chart-growth-acct', {
+        type:'bar',
+        data:{
+          labels:['TFP','Capital','Labour'],
+          datasets:[{
+            label:'Contribution (pp)',
+            data:[parseFloat(tfp.toFixed(3)),parseFloat(cap.toFixed(3)),parseFloat(lab.toFixed(3))],
+            backgroundColor:['rgba(200,57,43,0.85)','rgba(26,82,118,0.85)','rgba(212,160,23,0.85)'],
+            borderWidth:0,
+          }],
         },
-      },
-    });
-    // Also update global charts registry so destroyChart() works
-    if(window.charts) window.charts['chart-growth-acct'] = Chart.getChart(canvas);
+        options:{
+          responsive:true,indexAxis:'y',
+          plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${parseFloat(c.raw).toFixed(2)}pp`}}},
+          scales:{
+            x:{title:{display:true,text:'Percentage Points (pp)'},grid:{color:'rgba(0,0,0,0.06)'}},
+            y:{grid:{display:false}},
+          },
+        },
+      });
+      LOG('mkChart done — chart instance:', !!window.charts?.['chart-growth-acct']);
+    } catch(e) {
+      console.error('[growth-acct] mkChart failed:', e);
+    }
   }
 
   function render(periods) {
