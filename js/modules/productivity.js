@@ -432,7 +432,7 @@
   }
 
   async function initTFP() {
-    const panel = $('ch4-tfp-panel');
+    const panel = $('ch4-tfp');
     if (!panel || panel.dataset.built) return;
 
     /* Attach slider listeners */
@@ -465,7 +465,7 @@
      TAB 3 — R&D & Innovation
      ========================================================= */
   async function initRnD() {
-    const panel = $('ch4-rnd-panel');
+    const panel = $('ch4-rnd');
     if (!panel || panel.dataset.built) return;
 
     /* Fetch World Bank R&D % GDP for SGP + peers */
