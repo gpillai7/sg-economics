@@ -1346,10 +1346,6 @@
               <p class="nl-body">The productivity gap between high and low-performing sectors is the central challenge of Singapore's structural transformation agenda. Industrial policy (EDB, ESG) attempts to encourage resource reallocation — labour and capital shifting from low-productivity to high-productivity uses. The pace of this reallocation, not aggregate factor accumulation, is the binding constraint on future TFP growth.</p>
             </div>
             <div class="nl-divider"></div>
-            <div class="nl-section">
-              <div class="nl-section-label">Business Insight</div>
-              <p class="nl-body">Nominal VA/worker conflates genuine efficiency improvements with price effects — a sector with rising output prices will show productivity gains even if physical output per worker is flat. The quarterly VA/hour series in chained 2015 dollars corrects for both. For wage benchmarking and investment decisions, the quarterly series is the more reliable signal; the annual nominal series is appropriate for cost-of-production analysis and margin modelling.</p>
-            </div>
           </div>
           <div class="nl-chart-col">
             <div id="ch4-labour-kpi" style="margin-bottom:12px"></div>
@@ -1361,6 +1357,10 @@
               <div class="chart-label">VA/Hour Worked — Quarterly YoY % Change · SingStat M015861</div>
               <canvas id="ch4-lp-quarterly" height="190"></canvas>
             </div>
+            <div class="callout insight" style="margin-top:12px">
+              <div class="callout-label">📌 Business Insight</div>
+              Nominal VA/worker conflates genuine efficiency improvements with price effects. The quarterly VA/hour series in chained 2015 dollars corrects for both inflation and hours variation — use it for wage benchmarking and investment decisions; use the annual nominal series for cost-of-production and margin modelling.
+            </div>
           </div>
         </div>
 
@@ -1371,6 +1371,11 @@
             <div class="nl-chart-box">
               <div class="chart-label">VA/Worker by Industry, 2025 (YoY % Change) · SingStat M015831</div>
               <canvas id="ch4-lp-sectors" height="320"></canvas>
+            </div>
+            <div class="callout insight" style="margin-top:12px">
+              <div class="callout-label">📊 Data Sources</div>
+              Annual: SingStat M015831 — VA/Worker at current prices, 1984–2025, 25 industries.<br>
+              Quarterly: SingStat M015861 — VA/Hour in chained 2015$, 2018 1Q–present, 22 industries.
             </div>
           </div>
           <div class="nl-text-col">
@@ -1393,11 +1398,6 @@
                 g<sub>LP</sub> = g<sub>VA</sub> &minus; g<sub>L</sub> &nbsp;&nbsp;<span class="formula-comment">// Growth decomposition</span><br>
                 g<sub>LP</sub> = g<sub>TFP</sub> + &alpha;&middot;g<sub>K/L</sub> &nbsp;&nbsp;<span class="formula-comment">// Capital deepening + TFP</span>
               </div>
-            </div>
-            <div class="callout insight" style="margin-top:16px">
-              <div class="callout-label">📊 Data Sources</div>
-              Annual: SingStat M015831 — VA/Worker at current prices, 1984–2025, 25 industries.<br>
-              Quarterly: SingStat M015861 — VA/Hour in chained 2015$, 2018 1Q–present, 22 industries.
             </div>
           </div>
         </div>
@@ -1497,11 +1497,6 @@
               <div class="nl-section-label">Researchers as Human Capital</div>
               <p class="nl-body">Singapore's researchers-per-million-population ratio (~7,900 as of 2021) is among the highest in the world, significantly exceeding the USA (~4,400) and Germany (~5,200). This reflects deliberate human capital investment via the Research, Innovation and Enterprise (RIE) programme. However, a high researcher count does not automatically translate to commercial output — Singapore's patent applications per researcher remain below Korea and Japan, suggesting the research system is skewed toward academic output over industrial application.</p>
             </div>
-            <div class="nl-divider"></div>
-            <div class="nl-section">
-              <div class="nl-section-label">Ho &amp; Wong (2017) Elasticity</div>
-              <p class="nl-body">Ho &amp; Wong (2017) estimated Singapore's R&amp;D-to-TFP elasticity using panel VECM methods: a 1% increase in the R&amp;D knowledge stock generates 0.01–0.03pp of TFP growth in the short run, expanding to 0.05–0.11pp cumulatively over the long run (5–10 years). These estimates are comparable to small advanced economies (Ireland, Israel, Netherlands) but below the OECD benchmark of 0.13–0.17. The implication: R&amp;D investment pays off, but Singapore gets less TFP per R&amp;D dollar than frontier innovation economies, partly due to the MNC-dominated structure.</p>
-            </div>
           </div>
           <div class="nl-chart-col">
             <div id="ch4-rnd-kpi" style="margin-bottom:12px"></div>
@@ -1524,36 +1519,37 @@
               <div class="chart-label">R&amp;D Elasticity Simulator — TFP Impact of R&amp;D Stock Growth</div>
               <canvas id="ch4-rnd-sim" height="260"></canvas>
             </div>
+            <div class="controls" style="margin-top:12px;padding:12px;background:var(--card-bg);border:1px solid var(--rule);border-radius:4px">
+              <div class="ctrl-group">
+                <label class="ctrl-label">R&amp;D Stock Growth (%): <span id="ch4-rnd-chg-val">5</span>%</label>
+                <input type="range" class="ctrl-input" id="ch4-rnd-chg" min="1" max="20" step="0.5" value="5" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
+              </div>
+              <div class="ctrl-group">
+                <label class="ctrl-label">Short-run Elasticity: <span id="ch4-rnd-sr-val">0.020</span></label>
+                <input type="range" class="ctrl-input" id="ch4-rnd-sr" min="0.010" max="0.030" step="0.001" value="0.020" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
+              </div>
+              <div class="ctrl-group">
+                <label class="ctrl-label">Long-run Elasticity: <span id="ch4-rnd-lr-val">0.08</span></label>
+                <input type="range" class="ctrl-input" id="ch4-rnd-lr" min="0.05" max="0.11" step="0.005" value="0.08" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
+              </div>
+              <div class="result-box" id="ch4-rnd-result" style="margin-top:10px"></div>
+            </div>
           </div>
           <div class="nl-text-col">
             <div class="nl-section">
-              <div class="nl-section-label">Interactive: R&amp;D → TFP Simulator</div>
-              <div class="controls" style="margin-top:8px">
-                <div class="ctrl-group">
-                  <label class="ctrl-label">R&amp;D Stock Growth (%): <span id="ch4-rnd-chg-val">5</span>%</label>
-                  <input type="range" class="ctrl-input" id="ch4-rnd-chg" min="1" max="20" step="0.5" value="5" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
-                </div>
-                <div class="ctrl-group">
-                  <label class="ctrl-label">Short-run Elasticity: <span id="ch4-rnd-sr-val">0.020</span></label>
-                  <input type="range" class="ctrl-input" id="ch4-rnd-sr" min="0.010" max="0.030" step="0.001" value="0.020" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
-                </div>
-                <div class="ctrl-group">
-                  <label class="ctrl-label">Long-run Elasticity: <span id="ch4-rnd-lr-val">0.08</span></label>
-                  <input type="range" class="ctrl-input" id="ch4-rnd-lr" min="0.05" max="0.11" step="0.005" value="0.08" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
-                </div>
-              </div>
-              <div class="result-box" id="ch4-rnd-result" style="margin-top:10px"></div>
+              <div class="nl-section-label">Ho &amp; Wong (2017) Elasticity</div>
+              <p class="nl-body">Ho &amp; Wong (2017) estimated Singapore's R&amp;D-to-TFP elasticity using panel VECM methods: a 1% increase in the R&amp;D knowledge stock generates 0.01–0.03pp of TFP growth in the short run, expanding to 0.05–0.11pp cumulatively over the long run (5–10 years). These estimates are comparable to small advanced economies but below the OECD benchmark of 0.13–0.17. Singapore gets less TFP per R&amp;D dollar than frontier innovation economies, partly due to the MNC-dominated structure.</p>
             </div>
             <div class="nl-divider"></div>
             <div class="nl-section">
               <div class="nl-section-label">Policy Implications</div>
-              <p class="nl-body">The simulator distributes the long-run TFP impact geometrically across a 10-year lag structure — consistent with the empirical finding that R&amp;D investment generates diffuse, slow-moving productivity effects through technology adoption, worker skill accumulation, and spillovers into adjacent sectors.</p>
-              <p class="nl-body">The practical implication for corporate planning: R&amp;D investment justification should not be based on near-term TFP metrics. The short-run elasticity of 0.01–0.03 is small enough that most R&amp;D projects will not show up in productivity statistics within a planning cycle. Long-run elasticity (0.05–0.11) suggests R&amp;D does pay — but on a 5–10 year horizon, not a 12–18 month one.</p>
+              <p class="nl-body">The simulator distributes the long-run TFP impact geometrically across a 10-year lag structure — consistent with empirical findings that R&amp;D generates diffuse, slow-moving productivity effects through technology adoption, worker skill accumulation, and spillovers into adjacent sectors.</p>
+              <p class="nl-body">For corporate planning: R&amp;D investment justification should not be based on near-term TFP metrics. The short-run elasticity of 0.01–0.03 is too small to register within a planning cycle. Long-run elasticity (0.05–0.11) suggests R&amp;D does pay — but on a 5–10 year horizon.</p>
             </div>
             <div class="nl-divider"></div>
             <div class="nl-section">
               <div class="nl-section-label">Closing the Gap</div>
-              <p class="nl-body">Singapore's path to higher TFP growth runs through two channels: increasing R&amp;D intensity from ~2% toward the 3% government target (primarily through private sector uptake, not additional public spending) and improving the commercial translation rate of research — more patents, more spinouts, more licensing income per research dollar. The latter requires institutional changes to research incentive structures, not simply more funding.</p>
+              <p class="nl-body">Singapore's path to higher TFP growth runs through two channels: increasing R&amp;D intensity toward the 3% government target (primarily through private sector uptake) and improving the commercial translation rate of research — more patents, spinouts, and licensing income per research dollar. The latter requires institutional incentive reform, not simply more funding.</p>
             </div>
             <div class="callout policy" style="margin-top:16px">
               <div class="callout-label">🏛 Policy Reference</div>
