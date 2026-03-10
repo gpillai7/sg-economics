@@ -1233,6 +1233,8 @@
 
       <!-- TAB 3: FDI FLOWS & STOCK -->
       <div class="tab-panel" id="ch3-fdi-panel">
+
+        <!-- SECTION 1: Headline + inflows, text left / KPI+charts right -->
         <div class="nl-wrap" style="padding-left:20px">
           <div class="nl-text-col">
             <div class="nl-section">
@@ -1247,6 +1249,41 @@
             </div>
             <div class="nl-divider"></div>
             <div class="nl-section">
+              <div class="nl-section-label">Inflows vs. Peers</div>
+              <p class="nl-body">The inflows chart to the right plots SGP against Malaysia, Germany and the USA since 2000. Singapore's FDI intensity is structurally elevated — not a cyclical blip. The 2017 and 2021 spikes (26–33% of GDP) reflect lumpiness in mega-deals: technology MNCs establishing regional data centres and financial holding entities. Even in the trough years, SGP inflows exceed most peer economies' peaks.</p>
+            </div>
+          </div>
+          <div class="nl-chart-col">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;margin-bottom:12px">
+              <div id="ch3-fdi-kpi"></div>
+              <div class="nl-chart-box" style="margin:0">
+                <div class="chart-label">Inward FDI Stock: SGD Billion (2000–2024)</div>
+                <canvas id="ch3-fdi-stock" height="152"></canvas>
+              </div>
+            </div>
+            <div class="nl-chart-box">
+              <div class="chart-label">FDI Inflows as % of GDP — SGP vs Peers</div>
+              <canvas id="ch3-fdi-inflows" height="190"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="nl-divider" style="margin:1.6rem 20px"></div>
+
+        <!-- SECTION 2: Source composition, charts left / text right -->
+        <div class="nl-wrap nl-left" style="padding-left:20px">
+          <div class="nl-chart-col">
+            <div class="nl-chart-box">
+              <div class="chart-label">Top 10 Source Economies, 2024 (SGD Bn)</div>
+              <canvas id="ch3-fdi-sources" height="240"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">FDI Stock Trends by Source, 2015–2024</div>
+              <canvas id="ch3-fdi-trend" height="190"></canvas>
+            </div>
+          </div>
+          <div class="nl-text-col">
+            <div class="nl-section">
               <div class="nl-section-label">Source Economy Composition</div>
               <p class="nl-body">The United States is by far the largest source (SGD 719B, 25% of total stock), reflecting US MNC regional headquarters concentration. Japan (SGD 189B) and the UK (SGD 153B) rank 2nd and 3rd. Luxembourg and Netherlands feature prominently due to holding-company structures — they often represent ultimate beneficial ownership in Germany, France, and elsewhere. Round-tripping through offshore centres can inflate stated stock relative to operational investment.</p>
             </div>
@@ -1255,31 +1292,18 @@
               <div class="nl-section-label">Rising Asian Sources</div>
               <p class="nl-body">Mainland China's stock grew from SGD 22B (2015) to SGD 74B (2024), a 3.4× increase, as Chinese MNCs establish ASEAN regional bases in Singapore to de-risk supply chains and access Western capital markets. South Korea rose from SGD 9B to SGD 50B over the same period, driven by semiconductor and consumer electronics firms.</p>
             </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Business Insight</div>
+              <p class="nl-body">The USA-to-Singapore FDI corridor is driven by tax treaty arbitrage, IP box regimes, and treasury centralisation — not physical production. Firms locating Asia-Pacific holding entities here gain access to Singapore's 90+ tax treaties, sub-10% effective rates on qualifying IP income, and USD/SGD liquidity pools. The practical implication: FDI stock numbers significantly overstate Singapore's role as an operational production base relative to its role as a financial and legal domicile.</p>
+            </div>
             <div class="callout insight" style="margin-top:16px">
               <div class="callout-label">📊 Data Caveat</div>
-              FDI stock data from SingStat M083011 is in SGD millions, annual, from 1990. Source economy breakdown covers 2015–2024. Luxembourg and Netherlands figures include pass-through holding structures — ultimate beneficial owner data is not publicly available.
-            </div>
-          </div>
-          <div class="nl-chart-col">
-            <div id="ch3-fdi-kpi"></div>
-            <div class="nl-chart-box">
-              <div class="chart-label">FDI Inflows as % of GDP — SGP vs Peers</div>
-              <canvas id="ch3-fdi-inflows" height="200"></canvas>
-            </div>
-            <div class="nl-chart-box" style="margin-top:12px">
-              <div class="chart-label">Inward FDI Stock: SGD Billion (2000–2024)</div>
-              <canvas id="ch3-fdi-stock" height="180"></canvas>
-            </div>
-            <div class="nl-chart-box" style="margin-top:12px">
-              <div class="chart-label">Top 10 Source Economies, 2024 (SGD Bn)</div>
-              <canvas id="ch3-fdi-sources" height="220"></canvas>
-            </div>
-            <div class="nl-chart-box" style="margin-top:12px">
-              <div class="chart-label">FDI Stock Trends by Source, 2015–2024</div>
-              <canvas id="ch3-fdi-trend" height="200"></canvas>
+              SingStat M083011, SGD millions, annual from 1990. Source breakdown covers 2015–2024. Luxembourg and Netherlands include pass-through holding structures — ultimate beneficial owner data is not publicly available.
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
