@@ -1043,44 +1043,188 @@
         </div>
       </div>
 
-      <!-- TAB 2: TRADING PARTNERS -->
+      <!-- TAB 2: TRADING PARTNERS & GVC ANALYSIS -->
       <div class="tab-panel" id="ch3-partners">
-        <div class="nl-wrap nl-left">
-          <div class="nl-chart-col">
-            <div class="nl-chart-box">
-              <div class="chart-label">Merchandise Exports by Region (SGD Billion)</div>
-              <canvas id="ch3-partners-region" height="260"></canvas>
-            </div>
-            <div class="nl-chart-box" style="margin-top:12px">
-              <div class="chart-label">Top 8 Markets: 2010 vs 2024 (SGD Billion)</div>
-              <canvas id="ch3-partners-top" height="240"></canvas>
-            </div>
+        <div class="analysis-card">
+          <div class="card-header">
+            <span class="card-title">Trade in Value Added &amp; Global Value Chain Analysis</span>
+            <span class="card-tag">WTO / OECD TiVA 2018</span>
           </div>
-          <div class="nl-text-col">
-            <div class="nl-section">
-              <div class="nl-section-label">Geographic Concentration</div>
-              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Asia Accounts for 74% of Exports</h3>
-              <p class="nl-body">In 2024, Asia absorbed SGD 496B of Singapore's SGD 675B total merchandise exports — 74% of the total. The region's dominance has been structural since independence but its composition has shifted dramatically: China's share rose from under 7% in 2005 to over 14% in 2024, while Japan's slipped from 5.4% to 3.5%.</p>
+          <div class="card-body">
+
+            <!-- SECTION A: VA Components — nl-wrap (text left, chart right) -->
+            <div class="nl-wrap">
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Explanation</div>
+                  <div class="nl-body">Gross export statistics overstate a country's true contribution to global production because they record the full invoice value each time a good crosses a border. <strong>Trade in Value Added (TiVA)</strong> corrects this by tracing where the income actually accrues. Every dollar of Singapore's gross exports decomposes into four mutually exclusive parts: domestic value added that reaches a final consumer directly; domestic value added that flows into a third country's production chain (forward GVC participation); a tiny slice of domestic value added that is re-imported after being processed abroad; and foreign value added embedded in Singapore's exports from imports it purchased (backward GVC participation).</div>
+                  <div class="nl-body">The 2010→2018 picture is remarkably stable for Singapore. Foreign VA held at ~47% in both years, implying the economy neither deepened nor retreated from its import-intensive export model over that period. The slight decline in domestic VA flowing into GVCs (15.9% → 15.2%) suggests a marginal shift toward direct-to-consumer exports rather than further fragmentation into upstream GVC supply.</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Formula</div>
+                  <div class="formula-box">
+                    Gross Exports = DVA<sub>consumer</sub> + DVA<sub>GVC</sub> + DVA<sub>re-imported</sub> + FVA<br>
+                    <span class="formula-comment">// DVA = Domestic Value Added; FVA = Foreign Value Added</span><br><br>
+                    Forward GVC participation = DVA<sub>GVC</sub> / Gross Exports<br>
+                    Backward GVC participation = FVA / Gross Exports<br>
+                    <span class="formula-comment">// Singapore 2018: Forward 15.2%, Backward 47.3%, Total 62.5%</span>
+                  </div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Business Insight</div>
+                  <div class="nl-body">Singapore's Foreign VA share of ~47% is among the highest in the world — nearly double Asia's average of 24%. This reflects the economy's deliberate design as a re-export and processing hub: it imports advanced intermediates (semiconductors, chemicals, components) adds precision manufacturing or services value, and exports. This model is high-throughput but structurally exposed to upstream supply disruptions — as the 2020–2021 chip shortage demonstrated. Sourcing diversification is not optional for Singapore-based manufacturers; it is a systemic necessity.</div>
+                </div>
+              </div>
+              <div class="nl-chart-col">
+                <div class="nl-chart-box">
+                  <div class="chart-label">VA Components of Gross Exports: 2010 vs 2018 &middot; Source: WTO/OECD TiVA</div>
+                  <canvas id="ch3-gvc-va-components" height="160"></canvas>
+                </div>
+                <div class="nl-chart-box" style="margin-top:12px">
+                  <div class="chart-label">GVC Participation Index, 2018 — Singapore vs Regions</div>
+                  <canvas id="ch3-gvc-participation" height="220"></canvas>
+                </div>
+              </div>
             </div>
-            <div class="nl-divider"></div>
-            <div class="nl-section">
-              <div class="nl-section-label">Re-export Distortion</div>
-              <p class="nl-body">Singapore's role as a regional hub distorts bilateral trade figures. Hong Kong, which absorbs SGD 74B (11%), is primarily a conduit for onward shipment to Mainland China. Similarly, a portion of Malaysian and Indonesian trade represents transit via Singapore's port. Adjusting for re-exports materially reduces apparent bilateral surpluses.</p>
+
+            <hr class="nl-divider">
+
+            <!-- SECTION B: Industry decomposition — nl-wrap nl-left (charts left, text right) -->
+            <div class="nl-wrap nl-left">
+              <div class="nl-chart-col">
+                <div class="nl-chart-box">
+                  <div class="chart-label">Direct / Indirect / Foreign VA by Export Industry, 2018</div>
+                  <canvas id="ch3-gvc-dif" height="200"></canvas>
+                </div>
+                <div class="nl-chart-box" style="margin-top:12px">
+                  <div class="chart-label">DVA/FVA Split — Top 3 Export Industries, 2018</div>
+                  <canvas id="ch3-gvc-industry-dva" height="180"></canvas>
+                </div>
+              </div>
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Industry Decomposition</div>
+                  <div class="nl-body">The three industry panels reveal a critical structural divide. <strong>Computer &amp; electronic products</strong> — Singapore's largest export earner — carries foreign VA of 54.2%, the highest of the top industries. This reflects a genuine assembly-and-test role: Singapore imports wafers from Chinese Taipei, chemicals from the USA, and components from Japan, processes them in fabs, and re-exports finished semiconductors. The domestic value retention is real but modest relative to gross output value.</div>
+                  <div class="nl-body"><strong>Financial services</strong> sits at the opposite end: 69.2% domestic VA, the highest of the three. When Singapore's banks intermediate capital, structure derivatives, or manage regional treasury functions, the intellectual and human capital that generates value is largely domestic. Financial services are the highest-DVA component of Singapore's export base — which is partly why policymakers have prioritised fintech and wealth management expansion over low-margin logistics.</div>
+                  <div class="nl-body"><strong>Wholesale &amp; retail trade</strong> — the top export industry by economy-wide DVA share (9.1%) — is structurally distinct: it is the conduit for re-exports. Its 65.7% DVA is deceptively high because the "domestic value" includes trading margins, port fees, and logistics services, not physical production. High DVA in wholesale trade is a mark of entrepôt efficiency, not manufacturing sophistication.</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Top Export Destinations — DVA/FVA Split</div>
+                  <div class="nl-body">Export destination composition reveals another subtlety. Exports to <strong>China</strong> carry 52.6% domestic VA and 47.4% foreign — meaning nearly half the invoice value of Singapore's China exports originated in third countries. Exports to <strong>Indonesia</strong> carry an even higher FVA share (57%), reflecting Singapore's role as the regional assembler that imports heavily from the USA, Japan, and Chinese Taipei before exporting finished or semi-finished goods to Southeast Asian neighbours. Exports to the <strong>USA</strong> (58.5% DVA) are the most domestically-intensive, dominated by financial services, chemicals, and pharmaceutical products where Singapore genuinely adds high local value.</div>
+                </div>
+                <div class="callout insight" style="margin-top:12px">
+                  <div class="callout-label">📊 Key Data — Top Destinations, 2018</div>
+                  China: DVA 52.6% / FVA 47.4% &nbsp;(7.8% + 7.1% of total economy exports)<br>
+                  USA: DVA 58.5% / FVA 41.5% &nbsp;(5.4% + 3.8%)<br>
+                  Indonesia: DVA 43.0% / FVA 57.0% &nbsp;(3.4% + 4.5%)
+                </div>
+              </div>
             </div>
-            <div class="nl-divider"></div>
-            <div class="nl-section">
-              <div class="nl-section-label">USA Rising, Japan Falling</div>
-              <p class="nl-body">The United States has become a more significant direct destination — SGD 58B in 2024 versus SGD 31B in 2010 — driven by semiconductor equipment and pharmaceutical exports. Japan's share has compressed as its economy stagnated. Korea and Taiwan have risen sharply, reflecting semiconductor supply-chain deepening.</p>
+
+            <hr class="nl-divider">
+
+            <!-- SECTION C: Services VA & Intermediates — nl-wrap (text left, chart right) -->
+            <div class="nl-wrap">
+              <div class="nl-text-col">
+                <div class="nl-section">
+                  <div class="nl-section-label">Services as an Invisible Export Multiplier</div>
+                  <div class="nl-body">A defining feature of Singapore's GVC position is the high services content embedded in its goods exports — a phenomenon sometimes called <strong>"servicification"</strong>. In 2018, services value added accounted for roughly 68–70% of the total value in Singapore's gross exports when all domestic and foreign service inputs are counted. Even within manufactures exports, the combined services content exceeds 50%.</div>
+                  <div class="nl-body">The domestic services contributions are led by <strong>wholesale &amp; retail trade</strong> (15.8% of total gross exports), <strong>financial services</strong> (11.0%), and <strong>administrative &amp; support activities</strong> (7.6%). These are not passive support functions — they are integral steps in the production chain: commodity trading desks set export prices; treasury operations hedge FX exposure; logistics companies co-ordinate just-in-time delivery across the semiconductor supply chain.</div>
+                  <div class="nl-body">For manufactures specifically, the services content grew at 8.2% per annum 2010–2018 — nearly double the 3.4% rate for total exports — signalling that Singapore's manufacturing is becoming progressively more services-intensive. This aligns with the broader <em>servitisation</em> trend in advanced economies, where physical production is increasingly wrapped in high-margin services such as design, IP licensing, and after-sales support.</div>
+                </div>
+                <hr class="nl-divider">
+                <div class="nl-section">
+                  <div class="nl-section-label">Intermediate Goods Trade (2020)</div>
+                  <div class="nl-body">Intermediate goods — inputs used in further production rather than final consumption — form the backbone of GVC participation. Singapore exported USD 227B of intermediate goods in 2020 (65.8% of total goods exports) and imported USD 197B (70.5% of total). The asymmetry — more exported than imported — reflects value addition in processing. Intermediate services exports grew at 12.6% per annum 2010–2020, far outpacing goods (1.1%), underscoring the shift toward services-led GVC integration.</div>
+                  <div class="nl-body">The top destination for intermediate goods exports was Hong Kong (USD 37B, 16.3%) — almost certainly representing onward processing in or shipment to mainland China. Chinese Taipei was the top source of intermediate imports (USD 34B, 17.4%), primarily advanced semiconductors and IC components. This Taiwan→Singapore→China semiconductor corridor is the defining GVC backbone of Singapore's external sector.</div>
+                </div>
+                <div class="callout finding" style="margin-top:12px">
+                  <div class="callout-label">📊 Intermediate Trade, 2020 (USD Billion)</div>
+                  Export: Goods USD 227B (65.8% of total) · Services USD 75B (40.1% of total)<br>
+                  Import: Goods USD 197B (70.5%) · Services USD 76B (44.3%)<br>
+                  Top IG export dest.: HK USD 37B · China USD 36B · USA USD 23B<br>
+                  Top IG import origin: Taiwan USD 34B · USA USD 25B · Malaysia USD 23B
+                </div>
+              </div>
+              <div class="nl-chart-col">
+                <div class="nl-chart-box">
+                  <div class="chart-label">Services VA in Exports, 2018 — Total vs Manufactures</div>
+                  <canvas id="ch3-gvc-services" height="220"></canvas>
+                </div>
+                <div class="nl-chart-box" style="margin-top:12px">
+                  <div class="chart-label">Merchandise Exports by Destination Region, SGD Bn (2010–2024)</div>
+                  <canvas id="ch3-gvc-region" height="220"></canvas>
+                </div>
+              </div>
             </div>
-            <div class="nl-divider"></div>
-            <div class="nl-section">
-              <div class="nl-section-label">Commodity Concentration Risk</div>
-              <p class="nl-body">Electronics and chemicals together account for roughly 70% of domestic exports. This makes Singapore's external position highly sensitive to the global semiconductor cycle. The 2022 export spike (SGD 710B) reflects post-COVID electronics demand; the 2023 correction (SGD 638B) reflects the semiconductor down-cycle.</p>
+
+            <hr class="nl-divider">
+
+            <!-- SECTION D: Forward/Backward GVC — full-width summary tables -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4px">
+              <div>
+                <div class="nl-section-label" style="margin-bottom:10px">Forward GVC Participation — Top Industries &amp; Countries, 2018</div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.78rem;color:var(--text)">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--rule)">
+                      <th style="text-align:left;padding:4px 6px;color:var(--accent2)">Industry (Dom. inputs → 3rd economies)</th>
+                      <th style="text-align:right;padding:4px 6px;color:var(--accent2)">% of fwd. exports</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">Wholesale &amp; retail trade</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">23.6%</td></tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">Financial services</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">15.2%</td></tr>
+                    <tr><td style="padding:4px 6px">Chemical products</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">9.9%</td></tr>
+                  </tbody>
+                </table>
+                <table style="width:100%;border-collapse:collapse;font-size:0.78rem;color:var(--text);margin-top:10px">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--rule)">
+                      <th style="text-align:left;padding:4px 6px;color:var(--accent2)">Country receiving SGP inputs</th>
+                      <th style="text-align:right;padding:4px 6px;color:var(--accent2)">% of fwd. exports</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">China</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">11.9%</td></tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">Malaysia</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">7.4%</td></tr>
+                    <tr><td style="padding:4px 6px">Germany</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">5.6%</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <div class="nl-section-label" style="margin-bottom:10px">Backward GVC Participation — Top Industries &amp; Suppliers, 2018</div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.78rem;color:var(--text)">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--rule)">
+                      <th style="text-align:left;padding:4px 6px;color:var(--accent2)">GVC-importing industry</th>
+                      <th style="text-align:right;padding:4px 6px;color:var(--accent2)">% of foreign content</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">Petroleum products</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">16.1%</td></tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">Computer/electronic products</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">15.2%</td></tr>
+                    <tr><td style="padding:4px 6px">Water transport</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">14.0%</td></tr>
+                  </tbody>
+                </table>
+                <table style="width:100%;border-collapse:collapse;font-size:0.78rem;color:var(--text);margin-top:10px">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--rule)">
+                      <th style="text-align:left;padding:4px 6px;color:var(--accent2)">Foreign input provider</th>
+                      <th style="text-align:right;padding:4px 6px;color:var(--accent2)">% of foreign content</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">United States</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">13.2%</td></tr>
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:4px 6px">China</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">11.1%</td></tr>
+                    <tr><td style="padding:4px 6px">Japan</td><td style="text-align:right;padding:4px 6px;font-variant-numeric:tabular-nums">10.0%</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="callout insight" style="margin-top:16px">
-              <div class="callout-label">📊 GVC Hub Role</div>
-              Singapore sits at the centre of the Asian semiconductor GVC — importing wafers and chemicals, adding precision manufacturing, and re-exporting to final markets in China, the USA and Europe. Re-exports account for ~50% of gross merchandise exports by value.
-            </div>
+
           </div>
         </div>
       </div>

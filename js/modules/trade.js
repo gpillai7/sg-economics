@@ -227,7 +227,7 @@
   }
 
   /* =========================================================
-     TAB 2 — Trading Partners
+     TAB 2 — Trading Partners & GVC Analysis
      ========================================================= */
   async function initTradingPartners() {
     const panel = $('ch3-partners');
@@ -235,43 +235,62 @@
     if (panel.dataset.built) return;
 
     const d = await loadTivaData();
-    const mp = d.merchExportsByPartner;
+    const mp  = d.merchExportsByPartner;
+    const tv  = d.tiva;
     const years = ['2010','2012','2014','2016','2018','2020','2022','2024'];
 
-    /* Top 8 individual markets by 2024 share */
-    const indivMarkets = [
-      { key:'Mainland China',          label:'China',  color:'#e74c3c' },
-      { key:'Hong Kong',               label:'HK',     color:'#c0392b' },
-      { key:'Malaysia',                label:'MYS',    color:'#27ae60' },
-      { key:'United States Of America',label:'USA',    color:'#2980b9' },
-      { key:'Indonesia',               label:'IDN',    color:'#d35400' },
-      { key:'Taiwan',                  label:'Taiwan', color:'#8e44ad' },
-      { key:'Japan',                   label:'Japan',  color:'#d4ac0d' },
-      { key:'Republic Of Korea',       label:'Korea',  color:'#1abc9c' },
-    ];
-
-    /* stacked area – Asia vs rest */
-    const regionKeys = ['Asia','America','Europe','Oceania','Africa'];
-    const regionColors = [ACCENT,'#2980b9','#27ae60','#d35400','#8e44ad'];
-    const totalVals = years.map(y => mp['Total All Markets']?.[y] ?? null);
-
-    const regionDatasets = regionKeys.map((rk, i) => ({
-      label: rk,
-      data: years.map(y => mp[rk]?.[y] ?? null),
-      backgroundColor: regionColors[i] + 'cc',
-      borderColor: regionColors[i],
-      borderWidth: 1,
-      fill: true
-    }));
-
-    destroyChart('ch3-partners-region');
-    const ctx1 = $('ch3-partners-region');
+    /* ---- CHART 1: VA components of gross exports 2010 vs 2018 (stacked bar) ---- */
+    destroyChart('ch3-gvc-va-components');
+    const ctx1 = $('ch3-gvc-va-components');
     if (ctx1) {
+      const vc = tv.vaComponents;
       new Chart(ctx1, {
         type: 'bar',
         data: {
-          labels: years,
-          datasets: regionDatasets
+          labels: ['2010', '2018'],
+          datasets: [
+            { label: 'Domestic VA → Consumer', data: vc.domesticVAtoConsumer,
+              backgroundColor: '#1a5276cc', borderRadius: 2 },
+            { label: 'Domestic VA → GVCs (Fwd)', data: vc.domesticVAtoGVC,
+              backgroundColor: '#27ae60cc', borderRadius: 2 },
+            { label: 'Dom. VA Re-imported', data: vc.domesticVAReimported,
+              backgroundColor: '#d68910cc', borderRadius: 2 },
+            { label: 'Foreign VA in Exports (Bwd)', data: vc.foreignVA,
+              backgroundColor: '#c0392bcc', borderRadius: 2 },
+          ]
+        },
+        options: {
+          ...baseOptions(),
+          indexAxis: 'y',
+          plugins: {
+            ...CHART_DEFAULTS.plugins,
+            tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } }
+          },
+          scales: {
+            x: { ...CHART_DEFAULTS.scales.x, stacked: true,
+              title: { display: true, text: '% of total gross exports', color: TEXT, font: { size: 10 } },
+              max: 100 },
+            y: { ...CHART_DEFAULTS.scales.y, stacked: true }
+          }
+        }
+      });
+    }
+
+    /* ---- CHART 2: GVC Participation — SGP vs regional benchmarks ---- */
+    destroyChart('ch3-gvc-participation');
+    const ctx2 = $('ch3-gvc-participation');
+    if (ctx2) {
+      const gp = tv.gvcParticipation;
+      new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: gp.regions,
+          datasets: [
+            { label: 'Forward (Dom. VA → 3rd countries)',
+              data: gp.forward, backgroundColor: '#27ae60cc', borderRadius: 2 },
+            { label: 'Backward (Foreign VA in exports)',
+              data: gp.backward, backgroundColor: '#c0392bcc', borderRadius: 2 },
+          ]
         },
         options: {
           ...baseOptions(),
@@ -279,49 +298,167 @@
             ...CHART_DEFAULTS.plugins,
             tooltip: {
               callbacks: {
-                label: c => `${c.dataset.label}: SGD ${c.raw?.toFixed(0)}B`
+                label: c => `${c.dataset.label}: ${c.raw}%`,
+                afterBody: items => {
+                  const idx = items[0].dataIndex;
+                  return [`Total GVC participation: ${gp.total[idx]}%`];
+                }
               }
             }
           },
           scales: {
             x: CHART_DEFAULTS.scales.x,
             y: { ...CHART_DEFAULTS.scales.y, stacked: true,
-              title: { display: true, text: 'SGD Billion', color: TEXT, font: { size: 10 } } },
+              title: { display: true, text: '% of total gross exports', color: TEXT, font: { size: 10 } } }
           }
         }
       });
     }
 
-    /* Top partners 2024 horizontal bar */
-    const sorted2024 = indivMarkets.map(m => ({
-      label: m.label,
-      color: m.color,
-      val: mp[m.key]?.['2024'] ?? 0,
-      val2010: mp[m.key]?.['2010'] ?? 0
-    })).sort((a,b) => b.val - a.val);
-
-    destroyChart('ch3-partners-top');
-    const ctx2 = $('ch3-partners-top');
-    if (ctx2) {
-      new Chart(ctx2, {
+    /* ---- CHART 3: Direct / Indirect / Foreign VA by industry ---- */
+    destroyChart('ch3-gvc-dif');
+    const ctx3 = $('ch3-gvc-dif');
+    if (ctx3) {
+      const dif = tv.directIndirectForeignVA;
+      new Chart(ctx3, {
         type: 'bar',
         data: {
-          labels: sorted2024.map(m => m.label),
+          labels: dif.industries,
           datasets: [
-            { label: '2010', data: sorted2024.map(m => m.val2010), backgroundColor: '#5d6d7e', borderRadius: 2 },
-            { label: '2024', data: sorted2024.map(m => m.val),     backgroundColor: sorted2024.map(m => m.color), borderRadius: 2 }
+            { label: 'Direct Domestic VA',   data: dif.directDomesticVA,
+              backgroundColor: '#1a5276cc', borderRadius: 2 },
+            { label: 'Indirect Domestic VA', data: dif.indirectDomesticVA,
+              backgroundColor: '#2980b9cc', borderRadius: 2 },
+            { label: 'Foreign VA',            data: dif.foreignVA,
+              backgroundColor: '#c0392bcc', borderRadius: 2 },
           ]
         },
         options: {
-          ...baseOptions({ indexAxis: 'y' }),
+          ...baseOptions(),
+          indexAxis: 'y',
+          plugins: {
+            ...CHART_DEFAULTS.plugins,
+            tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } }
+          },
+          scales: {
+            x: { ...CHART_DEFAULTS.scales.x, stacked: true, max: 100,
+              title: { display: true, text: '% of industry gross exports', color: TEXT, font: { size: 10 } } },
+            y: { ...CHART_DEFAULTS.scales.y, stacked: true }
+          }
+        }
+      });
+    }
+
+    /* ---- CHART 4: Services VA in exports — total vs manufactures ---- */
+    destroyChart('ch3-gvc-services');
+    const ctx4 = $('ch3-gvc-services');
+    if (ctx4) {
+      const sv = tv.servicesVAInExports;
+      new Chart(ctx4, {
+        type: 'bar',
+        data: {
+          labels: ['Total Exports', 'Manufactures Exports'],
+          datasets: [
+            { label: 'Direct Domestic Services',
+              data: [sv.totalExports.directDomesticServices, sv.mfgExports.directDomesticServices],
+              backgroundColor: '#1a5276cc', borderRadius: 2 },
+            { label: 'Indirect Domestic Services',
+              data: [sv.totalExports.indirectDomesticServices, sv.mfgExports.indirectDomesticServices],
+              backgroundColor: '#2980b9cc', borderRadius: 2 },
+            { label: 'Foreign Services',
+              data: [sv.totalExports.foreignServices, sv.mfgExports.foreignServices],
+              backgroundColor: '#c0392bcc', borderRadius: 2 },
+          ]
+        },
+        options: {
+          ...baseOptions(),
+          plugins: {
+            ...CHART_DEFAULTS.plugins,
+            tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } }
+          },
+          scales: {
+            x: CHART_DEFAULTS.scales.x,
+            y: { ...CHART_DEFAULTS.scales.y, stacked: true,
+              title: { display: true, text: '% of gross exports', color: TEXT, font: { size: 10 } },
+              max: 80 }
+          }
+        }
+      });
+    }
+
+    /* ---- CHART 5: DVA/FVA by export industry (top 3) ---- */
+    destroyChart('ch3-gvc-industry-dva');
+    const ctx5 = $('ch3-gvc-industry-dva');
+    if (ctx5) {
+      const ti = tv.topExportIndustries;
+      new Chart(ctx5, {
+        type: 'bar',
+        data: {
+          labels: ti.industries,
+          datasets: [
+            { label: 'Domestic VA',
+              data: ti.dvaPctOfIndustry,
+              backgroundColor: '#1a5276cc', borderRadius: 2 },
+            { label: 'Foreign VA',
+              data: ti.fvaPctOfIndustry,
+              backgroundColor: '#c0392bcc', borderRadius: 2 },
+          ]
+        },
+        options: {
+          ...baseOptions(),
+          indexAxis: 'y',
+          plugins: {
+            ...CHART_DEFAULTS.plugins,
+            tooltip: {
+              callbacks: {
+                label: c => `${c.dataset.label}: ${c.raw}%`,
+                afterBody: items => {
+                  const idx = items[0].dataIndex;
+                  return [
+                    `Dom. VA share of economy: ${ti.dvaPctOfEconomy[idx]}%`,
+                    `For. VA share of economy: ${ti.fvaPctOfEconomy[idx]}%`
+                  ];
+                }
+              }
+            }
+          },
+          scales: {
+            x: { ...CHART_DEFAULTS.scales.x, stacked: true, max: 100,
+              title: { display: true, text: '% of industry gross exports', color: TEXT, font: { size: 10 } } },
+            y: { ...CHART_DEFAULTS.scales.y, stacked: true }
+          }
+        }
+      });
+    }
+
+    /* ---- CHART 6: Merchandise exports by region 2010-2024 ---- */
+    destroyChart('ch3-gvc-region');
+    const ctx6 = $('ch3-gvc-region');
+    if (ctx6) {
+      const regionKeys   = ['Asia','America','Europe','Oceania','Africa'];
+      const regionColors = ['#1a5276','#2980b9','#27ae60','#d35400','#8e44ad'];
+      new Chart(ctx6, {
+        type: 'bar',
+        data: {
+          labels: years,
+          datasets: regionKeys.map((rk, i) => ({
+            label: rk,
+            data: years.map(y => mp[rk]?.[y] ?? null),
+            backgroundColor: regionColors[i] + 'cc',
+            borderColor:     regionColors[i],
+            borderWidth: 1,
+          }))
+        },
+        options: {
+          ...baseOptions(),
           plugins: {
             ...CHART_DEFAULTS.plugins,
             tooltip: { callbacks: { label: c => `${c.dataset.label}: SGD ${c.raw?.toFixed(0)}B` } }
           },
           scales: {
-            x: { ...CHART_DEFAULTS.scales.x,
-              title: { display: true, text: 'SGD Billion', color: TEXT, font: { size: 10 } } },
-            y: CHART_DEFAULTS.scales.y
+            x: CHART_DEFAULTS.scales.x,
+            y: { ...CHART_DEFAULTS.scales.y, stacked: true,
+              title: { display: true, text: 'SGD Billion', color: TEXT, font: { size: 10 } } }
           }
         }
       });
@@ -330,7 +467,7 @@
     panel.dataset.built = '1';
   }
 
-  /* =========================================================
+/* =========================================================
      TAB 3 — FDI Flows & Stock
      ========================================================= */
   async function initFDI() {
