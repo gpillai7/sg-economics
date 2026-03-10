@@ -72,7 +72,7 @@
     const kpiMount = $('ch3-openness-kpi');
     if (kpiMount) {
       kpiMount.innerHTML = `
-        <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+        <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:0">
           <div class="kpi-card">
             <div class="kpi-label">Trade Openness (2024)</div>
             <div class="kpi-value" style="color:var(--accent)">${latest}%</div>
