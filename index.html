@@ -1319,112 +1319,250 @@
     <div class="module" id="mod-ch4">
       <div class="module-header">
         <div class="module-part">Economic Policies</div>
-        <h2 class="module-title">Productivity-Driven &<br>Innovation-Led Growth</h2>
-        <p class="module-intro">TFP is the residual driver of long-run growth. This module covers labour productivity, multifactor productivity (MFP), the production function estimation approach, and R&D elasticity analysis using data from Singapore's public sector economists.</p>
+        <h2 class="module-title">Productivity, TFP<br>&amp; Innovation</h2>
+        <p class="module-intro">Labour productivity, total factor productivity (TFP), and the R&D-to-growth transmission mechanism. Each tab links live SingStat and World Bank data to the underlying economic framework — from Solow residuals to Ho &amp; Wong (2017) R&D elasticity estimates.</p>
       </div>
 
       <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('ch4','tfp',event)">TFP Analysis</button>
-        <button class="tab-btn" onclick="switchTab('ch4','rd',event)">R&D Returns</button>
-        <button class="tab-btn" onclick="switchTab('ch4','sectors',event)">Sector Productivity</button>
+        <button class="tab-btn active" onclick="switchTab('ch4','labour',event)">Labour Productivity</button>
+        <button class="tab-btn" onclick="switchTab('ch4','tfp',event)">TFP &amp; Growth Accounting</button>
+        <button class="tab-btn" onclick="switchTab('ch4','rnd',event)">R&amp;D &amp; Innovation</button>
       </div>
 
-      <div class="tab-panel active" id="ch4-tfp">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">Total Factor Productivity Estimation</span>
-            <span class="card-tag">Solow Residual</span>
+      <!-- TAB 1: LABOUR PRODUCTIVITY -->
+      <div class="tab-panel active" id="ch4-labour">
+        <div class="nl-wrap" style="padding-left:20px">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Labour Productivity</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Value Added per Worker: The Structural Measure of Productive Efficiency</h3>
+              <p class="nl-body">Labour productivity — value added per worker, or per hour worked — is the single most important indicator of an economy's capacity for sustained real wage growth. Singapore's Department of Statistics publishes two complementary series: <strong>value added per worker at current prices</strong> (annual, by industry, M015831) captures nominal productivity levels including price effects; <strong>value added per actual hour worked in chained 2015 dollars</strong> (quarterly, M015861) strips out both inflation and hours variations to show pure physical output efficiency.</p>
+              <p class="nl-body">The 2024 rebound (+9.8% total, +9.2% manufacturing) followed the 2023 correction (-7.7% total, -20.9% manufacturing) driven by the global semiconductor down-cycle. The 2025 deceleration (+1.6% total) reflects normalisation rather than structural deterioration — manufacturing maintained +9.7%, while services softened.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Sectoral Divergence</div>
+              <p class="nl-body">The cross-sector bar chart reveals a structural productivity hierarchy. <strong>Information &amp; Communications</strong> (+20.8% in 2024, +12.5% in 2025) and <strong>Manufacturing</strong> consistently lead — both are export-facing, capital-intensive, and subject to technology-driven efficiency gains. <strong>Accommodation &amp; Food Services</strong> and <strong>Administrative &amp; Support Services</strong> trail structurally, reflecting labour-intensive service delivery where digital substitution is slower.</p>
+              <p class="nl-body">The productivity gap between high and low-performing sectors is the central challenge of Singapore's structural transformation agenda. Industrial policy (EDB, ESG) attempts to encourage resource reallocation — labour and capital shifting from low-productivity to high-productivity uses. The pace of this reallocation, not aggregate factor accumulation, is the binding constraint on future TFP growth.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Business Insight</div>
+              <p class="nl-body">Nominal VA/worker conflates genuine efficiency improvements with price effects — a sector with rising output prices will show productivity gains even if physical output per worker is flat. The quarterly VA/hour series in chained 2015 dollars corrects for both. For wage benchmarking and investment decisions, the quarterly series is the more reliable signal; the annual nominal series is appropriate for cost-of-production analysis and margin modelling.</p>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="card-desc">TFP (or MFP) is estimated as the Solow residual — the portion of output growth unexplained by factor inputs. Singapore's TFP is highly procyclical, reflecting firms' behaviour in adjusting utilisation rates rather than shedding workers during downturns.</div>
-            <div class="formula-box">
-              ln(TFP) = ln(Y) - α·ln(K) - (1-α)·ln(L)<br>
-              <span class="formula-comment">// Growth rate form:</span><br>
-              g_TFP = g_Y - α·g_K - (1-α)·g_L<br>
-              <span class="formula-comment">// α ≈ 0.40 for Singapore (capital income share)</span>
+          <div class="nl-chart-col">
+            <div id="ch4-labour-kpi" style="margin-bottom:12px"></div>
+            <div class="nl-chart-box">
+              <div class="chart-label">VA/Worker % Change by Sector — Annual · SingStat M015831</div>
+              <canvas id="ch4-lp-trend" height="210"></canvas>
             </div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">GDP Growth (%): <span id="tfp-gy-val">3.0</span>%</label>
-                <input type="range" class="ctrl-input" id="tfp-gy" min="-10" max="15" step="0.5" value="3.0" oninput="updateTFP()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Capital Growth (%): <span id="tfp-gk-val">4.0</span>%</label>
-                <input type="range" class="ctrl-input" id="tfp-gk" min="-5" max="15" step="0.5" value="4.0" oninput="updateTFP()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Labour Growth (%): <span id="tfp-gl-val">1.5</span>%</label>
-                <input type="range" class="ctrl-input" id="tfp-gl" min="-5" max="10" step="0.5" value="1.5" oninput="updateTFP()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Capital Share (α): <span id="tfp-alpha-val">0.40</span></label>
-                <input type="range" class="ctrl-input" id="tfp-alpha" min="0.25" max="0.55" step="0.01" value="0.40" oninput="updateTFP()">
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">VA/Hour Worked — Quarterly YoY % Change · SingStat M015861</div>
+              <canvas id="ch4-lp-quarterly" height="190"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="nl-divider" style="margin:1.6rem 20px"></div>
+
+        <div class="nl-wrap nl-left" style="padding-left:20px">
+          <div class="nl-chart-col">
+            <div class="nl-chart-box">
+              <div class="chart-label">VA/Worker by Industry, 2025 (YoY % Change) · SingStat M015831</div>
+              <canvas id="ch4-lp-sectors" height="320"></canvas>
+            </div>
+          </div>
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Reading the Cross-Sector Chart</div>
+              <p class="nl-body">The horizontal bar chart ranks industries by value-added per worker growth in 2025. Blue bars indicate productivity gains; red bars indicate contractions. This is the most granular publicly available productivity measure for Singapore — updated annually by DOS with a ~2-month lag after year-end.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Why VA/Worker ≠ TFP</div>
+              <p class="nl-body">Labour productivity (VA per worker) captures total output growth relative to labour input only. It therefore rises when capital deepens — more machines per worker — even if genuine multi-factor efficiency is unchanged. TFP (Tab 2) accounts for both capital and labour inputs; it is the conceptually superior measure of technological progress and organisational efficiency. A sector can show rising VA/worker purely because of capital substitution, with zero TFP improvement.</p>
+              <p class="nl-body">For Singapore, this distinction matters enormously. The economy has historically grown via capital deepening (investment-to-GDP ratios of 25–30%+). Interpreting high VA/worker growth as innovation-driven without checking capital growth rates leads to systematically overoptimistic assessments of long-run growth capacity.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Formula</div>
+              <div class="formula-box">
+                LP = VA / L &nbsp;&nbsp;<span class="formula-comment">// Value Added / Workers</span><br>
+                LP<sub>hours</sub> = VA<sub>real</sub> / H &nbsp;&nbsp;<span class="formula-comment">// Chained $ VA / Hours Worked</span><br><br>
+                g<sub>LP</sub> = g<sub>VA</sub> &minus; g<sub>L</sub> &nbsp;&nbsp;<span class="formula-comment">// Growth decomposition</span><br>
+                g<sub>LP</sub> = g<sub>TFP</sub> + &alpha;&middot;g<sub>K/L</sub> &nbsp;&nbsp;<span class="formula-comment">// Capital deepening + TFP</span>
               </div>
             </div>
-            <div class="result-box" id="tfp-result"></div>
-            <div class="chart-container">
-              <div class="chart-label">Singapore MFP Growth by Era (Representative Values)</div>
-              <canvas id="chart-tfp" height="220"></canvas>
+            <div class="callout insight" style="margin-top:16px">
+              <div class="callout-label">📊 Data Sources</div>
+              Annual: SingStat M015831 — VA/Worker at current prices, 1984–2025, 25 industries.<br>
+              Quarterly: SingStat M015861 — VA/Hour in chained 2015$, 2018 1Q–present, 22 industries.
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-panel" id="ch4-rd">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">R&D → TFP Elasticity</span>
-            <span class="card-tag">Ho & Wong (2017)</span>
+      <!-- TAB 2: TFP & GROWTH ACCOUNTING -->
+      <div class="tab-panel" id="ch4-tfp-panel">
+        <div class="nl-wrap" style="padding-left:20px">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Total Factor Productivity</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">The Solow Residual: Measuring What We Can't Measure</h3>
+              <p class="nl-body">TFP — Total Factor Productivity — is the portion of GDP growth unexplained by growth in capital and labour inputs. It captures technological progress, improvements in resource allocation, better management practices, and measurement error. Abramovitz famously called it "a measure of our ignorance." The TFP series here is computed using the Perpetual Inventory Method (PIM) on SingStat GFCF data for capital stock, and derived employment for labour — the same methodology as the ch2 Growth Accounting tab.</p>
+              <p class="nl-body">The Cobb-Douglas accounting identity holds that: <em>g</em><sub>Y</sub> = <em>g</em><sub>TFP</sub> + α·<em>g</em><sub>K</sub> + (1−α)·<em>g</em><sub>L</sub>. TFP is therefore the residual: everything left after attributing growth to capital's contribution (α·<em>g</em><sub>K</sub>) and labour's contribution ((1−α)·<em>g</em><sub>L</sub>). It is sensitive to both the capital share α and the depreciation rate δ — use the sliders to explore this sensitivity.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Era Analysis</div>
+              <p class="nl-body">The era decomposition chart reveals the shifting growth mix across four phases. In the <strong>1966–1980 catch-up era</strong>, capital deepening dominated — Singapore was investing at extraordinary rates to build industrial infrastructure from scratch. TFP contribution was positive but modest relative to capital. In the <strong>1981–1997 rapid growth era</strong>, the pattern persisted: Young (1995) and Krugman (1994) controversially argued this meant "perspiration not inspiration" — growth driven by input accumulation, not genuine productivity gains.</p>
+              <p class="nl-body">The <strong>2011–2025 mature era</strong> tells a different story: GDP growth has settled near 3%, capital deepening has slowed, and TFP's share of growth has risen to ~25–35% depending on α. This is consistent with the theory of conditional convergence — as capital accumulation runs into diminishing returns, growth must increasingly rely on genuine efficiency improvements.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Interactive Parameters</div>
+              <div class="controls" style="margin-top:8px">
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Capital Share (α): <span id="ch4-tfp-alpha-val">0.40</span></label>
+                  <input type="range" class="ctrl-input" id="ch4-tfp-alpha" min="0.25" max="0.55" step="0.01" value="0.40">
+                </div>
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Depreciation Rate (δ): <span id="ch4-tfp-delta-val">6.0%</span></label>
+                  <input type="range" class="ctrl-input" id="ch4-tfp-delta" min="3" max="10" step="0.5" value="6">
+                </div>
+              </div>
+              <div class="result-box" id="ch4-tfp-result" style="margin-top:10px">Loading TFP series from SingStat…</div>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="card-desc">Ho & Wong (2017) found: a 1% increase in R&D stock → TFP growth of 0.01–0.03% (short-run) and 0.05–0.11% (long-run). Singapore's short-run elasticity matches other small advanced economies; long-run lags slightly (benchmark: 0.13–0.17).</div>
-            <div class="formula-box">
-              ΔlnTFP_t = β₀ + β₁·Δln(R&D)_t + β₂·Δln(R&D)_{t-1} + ... + ε_t<br>
-              <span class="formula-comment">// Short-run elasticity: β₁ ≈ 0.01–0.03</span><br>
-              <span class="formula-comment">// Long-run elasticity: Σβ_i ≈ 0.05–0.11</span>
+          <div class="nl-chart-col">
+            <div class="nl-chart-box">
+              <div class="chart-label">TFP Contribution vs GDP Growth — Annual · PIM Capital Stock</div>
+              <canvas id="ch4-tfp-series" height="230"></canvas>
             </div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">R&D Stock Change (%): <span id="rd-chg-val">5</span>%</label>
-                <input type="range" class="ctrl-input" id="rd-chg" min="0" max="20" step="0.5" value="5" oninput="updateRD()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Short-run Elasticity: <span id="sr-elast-val">0.020</span></label>
-                <input type="range" class="ctrl-input" id="sr-elast" min="0.01" max="0.03" step="0.001" value="0.020" oninput="updateRD()">
-              </div>
-              <div class="ctrl-group">
-                <label class="ctrl-label">Long-run Elasticity: <span id="lr-elast-val">0.08</span></label>
-                <input type="range" class="ctrl-input" id="lr-elast" min="0.05" max="0.11" step="0.005" value="0.08" oninput="updateRD()">
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">Growth Decomposition by Era — Capital / Labour / TFP (avg pp)</div>
+              <canvas id="ch4-tfp-decomp" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="nl-divider" style="margin:1.6rem 20px"></div>
+
+        <div class="nl-wrap nl-left" style="padding-left:20px">
+          <div class="nl-chart-col" style="display:flex;flex-direction:column;gap:12px">
+            <div class="nl-chart-box" style="margin:0">
+              <div class="chart-label">Formula Reference</div>
+              <div style="padding:8px 4px;font-size:0.78rem">
+                <div class="formula-box" style="margin:0">
+                  Y = A &middot; K<sup>&alpha;</sup> &middot; L<sup>(1&minus;&alpha;)</sup> &nbsp;&nbsp;<span class="formula-comment">// Cobb-Douglas</span><br>
+                  K<sub>t</sub> = (1&minus;&delta;)K<sub>t-1</sub> + I<sub>t</sub> &nbsp;&nbsp;<span class="formula-comment">// PIM capital stock</span><br>
+                  g<sub>Y</sub> = g<sub>TFP</sub> + &alpha;&middot;g<sub>K</sub> + (1&minus;&alpha;)&middot;g<sub>L</sub><br>
+                  TFP = g<sub>Y</sub> &minus; &alpha;&middot;g<sub>K</sub> &minus; (1&minus;&alpha;)&middot;g<sub>L</sub> &nbsp;&nbsp;<span class="formula-comment">// Solow Residual</span>
+                </div>
               </div>
             </div>
-            <div class="result-box" id="rd-result"></div>
-            <div class="chart-container">
-              <div class="chart-label">TFP Impact of R&D Stock Changes Over Time</div>
-              <canvas id="chart-rd" height="220"></canvas>
+          </div>
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Business Insight</div>
+              <p class="nl-body">The most practically important insight from the TFP chart is the volatility of the annual residual versus the smoothness of era averages. Year-to-year TFP is dominated by cyclical utilisation changes — firms run existing capital harder in booms, slack in recessions. This is not genuine technological progress; it is short-run adjustment. Structural TFP trend is only visible over multi-year averages.</p>
+              <p class="nl-body">For corporate strategy, the era decomposition reveals a fundamental shift in Singapore's growth model that many forecast models fail to capture. Growth projections built on 1990s input-accumulation dynamics systematically overestimate future growth. The sustainable real growth rate for a mature Singapore economy is bounded by TFP growth plus labour force expansion — both modest. Medium-term business plans should baseline 2–3% real GDP growth, not 5–6%.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">The α Sensitivity Problem</div>
+              <p class="nl-body">Slide α from 0.25 to 0.55 and observe how TFP's share of growth changes dramatically. At α=0.25, capital gets less credit and TFP gets more; at α=0.55, the reverse. National accounts suggest Singapore's true α is 0.38–0.45. The Young–Krugman debate in the 1990s hinged partly on this calibration — higher α made East Asian growth look entirely input-driven with zero TFP. The honest answer is that α is not directly observable, and TFP estimates should be reported as ranges across plausible parameter values.</p>
+            </div>
+            <div class="callout finding" style="margin-top:16px">
+              <div class="callout-label">📊 Data Sources</div>
+              Capital stock: PIM on SingStat GFCF (M016161). GDP: SingStat M015721. Employment: DOS + World Bank SL.TLF.TOTL.IN. Updated to 2025.
             </div>
           </div>
         </div>
       </div>
 
-      <div class="tab-panel" id="ch4-sectors">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">Sector-Level Productivity Comparison</span>
-            <span class="card-tag">Labour Productivity by Industry</span>
-          </div>
-          <div class="card-body">
-            <div class="card-desc">Labour productivity varies substantially across Singapore's economic sectors. High value-added sectors (Finance, Infocomm, Manufacturing high-tech) drive aggregate productivity growth disproportionately relative to their employment share.</div>
-            <div class="chart-container">
-              <div class="chart-label">Labour Productivity (Value-Added per Worker) by Sector, Singapore</div>
-              <canvas id="chart-sectors" height="280"></canvas>
+      <!-- TAB 3: R&D & INNOVATION -->
+      <div class="tab-panel" id="ch4-rnd-panel">
+        <div class="nl-wrap" style="padding-left:20px">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">R&amp;D Intensity &amp; the Innovation System</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Singapore's 2% R&amp;D Ratio: High in Absolute Terms, Below the Frontier</h3>
+              <p class="nl-body">Singapore's R&amp;D expenditure as a percentage of GDP has hovered between 1.8–2.2% since 2000 (World Bank, GB.XPD.RSDV.GD.ZS). This places it above the OECD median (~1.7%) and comparable to Germany, but well below the innovation frontier: Korea has crossed 5%, Israel exceeds 6%, and even the USA has risen to 3.5%+. Singapore's government target of 3%+ has been a recurring policy aspiration but actual spending has not converged toward that target.</p>
+              <p class="nl-body">The gap between Singapore's R&amp;D ratio and Korea's reflects a structural difference in economic model: Korea's chaebols (Samsung, LG, SK Hynix) invest heavily in proprietary semiconductor and display technology R&amp;D as a core competitive strategy. Singapore's MNC-dominated economy tends to offshore R&amp;D to parent companies' home countries — the Singapore entity executes manufacturing and services, not fundamental research.</p>
             </div>
-            <div class="callout policy">
-              <div class="callout-label">🏛 Policy Implication</div>
-              Industrial policy should encourage resource reallocation from low-productivity to high-productivity sectors. The productivity gap between services and manufacturing highlights the challenge of the ongoing structural shift towards a services-led economy.
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Researchers as Human Capital</div>
+              <p class="nl-body">Singapore's researchers-per-million-population ratio (~7,900 as of 2021) is among the highest in the world, significantly exceeding the USA (~4,400) and Germany (~5,200). This reflects deliberate human capital investment via the Research, Innovation and Enterprise (RIE) programme. However, a high researcher count does not automatically translate to commercial output — Singapore's patent applications per researcher remain below Korea and Japan, suggesting the research system is skewed toward academic output over industrial application.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Ho &amp; Wong (2017) Elasticity</div>
+              <p class="nl-body">Ho &amp; Wong (2017) estimated Singapore's R&amp;D-to-TFP elasticity using panel VECM methods: a 1% increase in the R&amp;D knowledge stock generates 0.01–0.03pp of TFP growth in the short run, expanding to 0.05–0.11pp cumulatively over the long run (5–10 years). These estimates are comparable to small advanced economies (Ireland, Israel, Netherlands) but below the OECD benchmark of 0.13–0.17. The implication: R&amp;D investment pays off, but Singapore gets less TFP per R&amp;D dollar than frontier innovation economies, partly due to the MNC-dominated structure.</p>
+            </div>
+          </div>
+          <div class="nl-chart-col">
+            <div id="ch4-rnd-kpi" style="margin-bottom:12px"></div>
+            <div class="nl-chart-box">
+              <div class="chart-label">R&amp;D Expenditure (% of GDP) — SGP vs Peers · World Bank Live</div>
+              <canvas id="ch4-rnd-trend" height="220"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:12px">
+              <div class="chart-label">Researchers per Million Population · World Bank Live</div>
+              <canvas id="ch4-rnd-researchers" height="190"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="nl-divider" style="margin:1.6rem 20px"></div>
+
+        <div class="nl-wrap nl-left" style="padding-left:20px">
+          <div class="nl-chart-col">
+            <div class="nl-chart-box">
+              <div class="chart-label">R&amp;D Elasticity Simulator — TFP Impact of R&amp;D Stock Growth</div>
+              <canvas id="ch4-rnd-sim" height="260"></canvas>
+            </div>
+          </div>
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Interactive: R&amp;D → TFP Simulator</div>
+              <div class="controls" style="margin-top:8px">
+                <div class="ctrl-group">
+                  <label class="ctrl-label">R&amp;D Stock Growth (%): <span id="ch4-rnd-chg-val">5</span>%</label>
+                  <input type="range" class="ctrl-input" id="ch4-rnd-chg" min="1" max="20" step="0.5" value="5" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
+                </div>
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Short-run Elasticity: <span id="ch4-rnd-sr-val">0.020</span></label>
+                  <input type="range" class="ctrl-input" id="ch4-rnd-sr" min="0.010" max="0.030" step="0.001" value="0.020" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
+                </div>
+                <div class="ctrl-group">
+                  <label class="ctrl-label">Long-run Elasticity: <span id="ch4-rnd-lr-val">0.08</span></label>
+                  <input type="range" class="ctrl-input" id="ch4-rnd-lr" min="0.05" max="0.11" step="0.005" value="0.08" oninput="if(window.renderRndSimulator) window.renderRndSimulator()">
+                </div>
+              </div>
+              <div class="result-box" id="ch4-rnd-result" style="margin-top:10px"></div>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Policy Implications</div>
+              <p class="nl-body">The simulator distributes the long-run TFP impact geometrically across a 10-year lag structure — consistent with the empirical finding that R&amp;D investment generates diffuse, slow-moving productivity effects through technology adoption, worker skill accumulation, and spillovers into adjacent sectors.</p>
+              <p class="nl-body">The practical implication for corporate planning: R&amp;D investment justification should not be based on near-term TFP metrics. The short-run elasticity of 0.01–0.03 is small enough that most R&amp;D projects will not show up in productivity statistics within a planning cycle. Long-run elasticity (0.05–0.11) suggests R&amp;D does pay — but on a 5–10 year horizon, not a 12–18 month one.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Closing the Gap</div>
+              <p class="nl-body">Singapore's path to higher TFP growth runs through two channels: increasing R&amp;D intensity from ~2% toward the 3% government target (primarily through private sector uptake, not additional public spending) and improving the commercial translation rate of research — more patents, more spinouts, more licensing income per research dollar. The latter requires institutional changes to research incentive structures, not simply more funding.</p>
+            </div>
+            <div class="callout policy" style="margin-top:16px">
+              <div class="callout-label">🏛 Policy Reference</div>
+              Research, Innovation &amp; Enterprise (RIE) 2025 plan: SGD 25B over 5 years. Target sectors: Manufacturing &amp; Trade, Human Health &amp; Potential, Urban Solutions &amp; Sustainability, Smart Nation &amp; Digital Economy.
             </div>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- MODULE: CH5 - INDUSTRIAL -->
@@ -2339,6 +2477,7 @@ function initModule(id) {
   const inits = {
     ch2: () => { window.initGDPAnnual ? window.initGDPAnnual() : updateGDPChart(); window.initGDPGrowthAcct ? window.initGDPGrowthAcct() : updateGrowthAcct(); window.initFiscal ? window.initFiscal() : updateFiscal(); },
     ch3: () => { if(window.initTrade) window.initTrade(); },
+    ch4: () => { if(window.initProductivity) window.initProductivity(); },
     ch7: () => { updateMincer(); },
     ch8: () => { updateGini(); updateLorenz(); initGatsby(); updateIGM(); },
     ch9: () => { updateDivorce(); },
@@ -2356,9 +2495,9 @@ function initTab(ch, tab) {
     'ch3-trade-openness': function() { if(window.initTradeOpenness) window.initTradeOpenness(); },
     'ch3-partners':       function() { if(window.initTradingPartners) window.initTradingPartners(); },
     'ch3-fdi-panel':      function() { if(window.initFDI_ch3) window.initFDI_ch3(); },
-    'ch4-tfp': updateTFP,
-    'ch4-rd': updateRD,
-    'ch4-sectors': initSectors,
+    'ch4-labour':    function() { if(window.initLabourProductivity) window.initLabourProductivity(); },
+    'ch4-tfp-panel': function() { if(window.initTFP_ch4) window.initTFP_ch4(); },
+    'ch4-rnd-panel': function() { if(window.initRnD_ch4) window.initRnD_ch4(); },
     'ch8-gini': updateGini,
     'ch8-lorenz': updateLorenz,
     'ch8-gatsby': initGatsby,
@@ -3453,5 +3592,6 @@ window.addEventListener('DOMContentLoaded', () => {
 <script src="js/modules/gdp-fiscal.js"></script>
 <script src="js/modules/gdp-quarterly.js"></script>
 <script src="js/modules/trade.js"></script>
+<script src="js/modules/productivity.js"></script>
 </body>
 </html>
