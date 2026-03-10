@@ -1566,52 +1566,138 @@
       <div class="module-header">
         <div class="module-part">Economic Policies</div>
         <h2 class="module-title">Industrial Development<br>in Singapore</h2>
-        <p class="module-intro">Singapore's industrial policy has evolved from labour-intensive manufacturing to knowledge-intensive, high-value activities. This chapter analyses sectoral composition, shift-share analysis, and industrial diversification using the SSIC framework.</p>
+        <p class="module-intro">From entrepôt port to semiconductor powerhouse: Singapore's manufacturing sector has defied deindustrialisation, sustaining a ~21% share of real GDP while radically upgrading its composition. This chapter analyses EDB cluster data, industrial production indices, and structural transformation using SingStat and EDB annual surveys.</p>
       </div>
-      <div class="analysis-grid">
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">Sectoral Composition of GDP</span>
-            <span class="card-tag">Structural Transformation</span>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('ch5','cluster',event)">Cluster Composition</button>
+        <button class="tab-btn" onclick="switchTab('ch5','productivity',event)">Productivity &amp; Intensity</button>
+        <button class="tab-btn" onclick="switchTab('ch5','structural',event)">Structural Transformation</button>
+      </div>
+
+      <!-- TAB 1: CLUSTER COMPOSITION -->
+      <div class="tab-panel active" id="ch5-cluster">
+        <div class="nl-wrap" style="padding-left:20px">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">EDB Cluster Framework</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Five Clusters, One Industrial Strategy</h3>
+              <p class="nl-body">Singapore's manufacturing sector is organised around five EDB-defined clusters rather than standard SSIC codes — a deliberate policy architecture reflecting industrial targeting since the 1990s. <strong>Electronics</strong> dominates at 45.6% of total output in 2025 (SGD 218B), anchored by semiconductor wafer fabrication. <strong>Chemicals</strong> follows at 18.4%, driven by petroleum refining and petrochemical complexes on Jurong Island. <strong>Precision Engineering</strong> (11.8%) and <strong>Transport Engineering</strong> (10.3%) round out the capital goods base, while <strong>Biomedical Manufacturing</strong> (7.7%) punches above its output share in value-added terms.</p>
+              <p class="nl-body">The cluster composition reflects deliberate upgrading: Electronics saw output surge from SGD 126B (2019) to SGD 218B (2025), driven by the global semiconductor supercycle and Singapore's position as a leading wafer-fab location. Transport Engineering rebounded sharply — from SGD 33B (2023) to SGD 49B (2025) — as aerospace MRO recovered post-COVID and marine/offshore benefited from energy transition demand.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Employment Dynamics</div>
+              <p class="nl-body">Total manufacturing employment contracted from a peak of ~414K (2010) to 351K in 2025. Electronics shed workers from 102K (2000) to 58K (2025) even as output tripled — a capital-deepening signature. Biomedical roughly quadrupled employment (6K → 26K) as pharma and medtech capacity was established. The output-per-worker trajectory is the correct lens: manufacturing is shedding low-productivity headcount while expanding high-productivity capacity. This is precisely what upgrading looks like in the data.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Data Sources</div>
+              <p class="nl-body">Output and employment series from EDB Annual Survey of Manufacturing (EDB M355171, M355151). Cluster definitions follow EDB's industry promotion framework. 2025 figures are preliminary estimates published February 2026.</p>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="card-desc">Singapore's economy has undergone dramatic structural transformation, shifting from entrepôt trade → labour-intensive manufacturing → capital-intensive industry → knowledge economy. This is visible in changing sectoral shares of GDP over time.</div>
-            <div class="controls">
-              <div class="ctrl-group">
-                <label class="ctrl-label">Year</label>
-                <select class="ctrl-select" id="sector-year" onchange="updateSectors()">
-                  <option value="1970">1970</option>
-                  <option value="1985">1985</option>
-                  <option value="2000">2000</option>
-                  <option value="2010">2010</option>
-                  <option value="2022" selected>2022</option>
-                </select>
+          <div class="nl-chart-col">
+            <div id="ch5-cluster-kpi" style="margin-bottom:12px"></div>
+            <div class="nl-chart-box">
+              <div class="chart-label">Manufacturing Output by EDB Cluster, 2000–2025 · EDB M355171</div>
+              <canvas id="ch5-cluster-area" height="220"></canvas>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+              <div class="nl-chart-box">
+                <div class="chart-label">Output Share 2025</div>
+                <canvas id="ch5-cluster-share" height="170"></canvas>
+              </div>
+              <div class="nl-chart-box">
+                <div class="chart-label">Employment by Cluster · EDB M355151</div>
+                <canvas id="ch5-cluster-emp" height="170"></canvas>
               </div>
             </div>
-            <div class="chart-container">
-              <div class="chart-label">GDP Composition by Sector</div>
-              <canvas id="chart-industrial" height="280"></canvas>
-            </div>
           </div>
         </div>
-        <div class="analysis-card">
-          <div class="card-header">
-            <span class="card-title">Shift-Share Analysis</span>
-            <span class="card-tag">Industry Growth Decomposition</span>
-          </div>
-          <div class="card-body">
-            <div class="card-desc">Shift-share decomposition separates regional industry growth into: (1) National growth effect, (2) Industry mix effect, (3) Competitive (local) effect. A positive competitive effect signals Singapore-specific advantages in that industry.</div>
-            <div class="formula-box">
-              ΔE_ij = E_ij·(r_n) + E_ij·(r_in - r_n) + E_ij·(r_ij - r_in)<br>
-              <span class="formula-comment">       National    Industry Mix    Competitive</span>
+      </div>
+
+      <!-- TAB 2: PRODUCTIVITY & VA INTENSITY -->
+      <div class="tab-panel" id="ch5-productivity">
+        <div class="nl-wrap" style="padding-left:20px">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">Value-Add Intensity</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">VA/Output Ratio: The Knowledge Content of Manufacturing</h3>
+              <p class="nl-body">VA intensity — value added as a share of gross output — is the clearest single metric of a manufacturing sector's knowledge content and local economic contribution. Singapore's total manufacturing VA intensity stands at 27.7% in 2025. <strong>Biomedical leads at 44.4%</strong> — pharmaceuticals and medtech embed significant domestic R&amp;D and clinical value. Electronics is surprisingly average at 26.3% despite its output dominance — semiconductor fabs are capital-intensive but heavily reliant on imported silicon, gases, and equipment. Chemicals is lowest at 17.4%, consistent with its commodity-refining character.</p>
+              <p class="nl-body">VA intensity is not the same as profitability or strategic value — low-VA-intensity clusters like Electronics and Chemicals still generate enormous spillovers via employment in engineering services, logistics, and equipment maintenance. But for understanding how deeply production is embedded in the domestic economy, VA intensity is the right metric.</p>
             </div>
-            <div class="chart-container">
-              <div class="chart-label">Shift-Share Components by Key Sector (Representative)</div>
-              <canvas id="chart-shiftshare" height="240"></canvas>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">VA per Worker</div>
+              <p class="nl-body">Electronics VA/worker surged from SGD 256K (2010) to SGD 982K (2025), a 283% increase driven by semiconductor fab automation and the shift toward advanced-node production. Biomedical fell from SGD 795K (2010) to SGD 624K (2025) — reflecting workforce expansion into clinical trials and quality operations as Singapore built out capacity, diluting the per-worker ratio temporarily. Total manufacturing VA/worker rose +160% over 2010–2025 (SGD 145K → SGD 379K), significantly outpacing nominal wage growth — the wedge accrues to capital and tax revenue rather than workers, with implications for inclusive growth policy.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Industrial Production Index</div>
+              <p class="nl-body">The IIP (2025=100) measures physical output volume. Total IIP rose from 74.0 in 2019 to 100 in 2025 (+35%). Electronics recovered from the 2023 semiconductor downcycle (88.6 in 2023 → 92.0 in 2024 → 100 in 2025). Transport Engineering is the standout recovery story — from 66.5 (2019) to 100 (2025) — driven by aerospace MRO and defence shipbuilding. Chemicals tracked near 100 throughout, reflecting the sector's stable refining volumes and insensitivity to tech cycles.</p>
+            </div>
+          </div>
+          <div class="nl-chart-col">
+            <div id="ch5-prod-kpi" style="margin-bottom:12px"></div>
+            <div class="nl-chart-box">
+              <div class="chart-label">VA per Worker by Cluster, SGD '000 · EDB M355201</div>
+              <canvas id="ch5-vapw-trend" height="210"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:10px">
+              <div class="chart-label">Index of Industrial Production by Cluster (2025=100) · EDB M355401</div>
+              <canvas id="ch5-iip" height="180"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:10px">
+              <div class="chart-label">VA Intensity (VA/Output %) by Cluster, 2025 · EDB M355181 &amp; M355171</div>
+              <canvas id="ch5-va-intensity" height="155"></canvas>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- TAB 3: STRUCTURAL TRANSFORMATION -->
+      <div class="tab-panel" id="ch5-structural">
+        <div class="nl-wrap" style="padding-left:20px">
+          <div class="nl-text-col">
+            <div class="nl-section">
+              <div class="nl-section-label">The Deindustrialisation Puzzle</div>
+              <h3 style="font-size:1.05rem;margin:0.4rem 0 0.7rem">Manufacturing at 21%: Singapore's Exceptional Stability</h3>
+              <p class="nl-body">Advanced economies typically experience sustained manufacturing decline as services expand — Baumol cost disease and Engel curve dynamics shift consumption and employment toward services as incomes rise. Singapore is a notable exception: manufacturing's share of real GDP has held in a narrow 20–22% band from 1990 to 2025, resisting the deindustrialisation that has hollowed out manufacturing in the UK, USA, and most European peers.</p>
+              <p class="nl-body">The explanation is active industrial policy. EDB's cluster strategy, JTC industrial estates, targeted tax incentives (Pioneer Status, Development and Expansion Incentive), and co-investment in R&amp;D infrastructure have continuously attracted capital-intensive, high-complexity manufacturing. The counterfactual is Hong Kong, where manufacturing collapsed from ~24% of GDP in 1980 to under 1% today. Singapore's stability is policy-manufactured, not market-discovered.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Shift-Share: Employment 2010→2024</div>
+              <p class="nl-body">Shift-share decomposition separates employment change into a <strong>National Growth Effect</strong> (what each industry would have experienced at the manufacturing-wide growth rate) and an <strong>Industry-Specific Effect</strong> (the deviation — positive means the industry outperformed, negative means underperformance relative to the aggregate).</p>
+              <div class="formula-box">
+                ΔE<sub>i</sub> = E<sub>i0</sub>·r<sub>n</sub> + E<sub>i0</sub>·(r<sub>i</sub> − r<sub>n</sub>)<br>
+                <span class="formula-comment">// National effect + Industry-specific effect</span>
+              </div>
+              <p class="nl-body">Computer, Electronic &amp; Optical Products shows a large negative industry-specific effect — employment fell even as output rose, a capital-deepening signature. Other Transport Equipment (aerospace + marine) shows a strongly positive specific effect, gaining workers faster than the aggregate as post-COVID recovery accelerated. Machinery &amp; Equipment — the precision engineering backbone — shows moderate positive specific effects, suggesting sustained competitiveness in high-mix, low-volume capital goods production.</p>
+            </div>
+            <div class="nl-divider"></div>
+            <div class="nl-section">
+              <div class="nl-section-label">Technology Upgrading</div>
+              <p class="nl-body">Medium and high-tech industries' share of manufacturing VA rose from 76.7% (2005) to 85.5% (2022) — an 8.8 percentage point upgrade over 17 years. The sharpest jump came in 2017–2018 (82.8% → 87.4%), coinciding with the global semiconductor investment wave and Singapore's position as preferred wafer-fab location for TSMC, Micron, and GlobalFoundries. The data ends at 2022; EDB has not yet published updates for 2023–2025.</p>
+            </div>
+          </div>
+          <div class="nl-chart-col">
+            <div class="nl-chart-box">
+              <div class="chart-label">Sector Shares of Real GDP, 1990–2025 · SingStat M015951</div>
+              <canvas id="ch5-mfg-gdp-share" height="210"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:10px">
+              <div class="chart-label">Employment Shift-Share by SSIC Industry, 2010→2024 · SingStat M354871</div>
+              <canvas id="ch5-shiftshare" height="270"></canvas>
+            </div>
+            <div class="nl-chart-box" style="margin-top:10px">
+              <div class="chart-label">Medium &amp; High-Tech Share of Mfg VA, 2005–2022 · EDB M355341</div>
+              <canvas id="ch5-hightech" height="145"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- MODULE: CH6 - ENTERPRISE -->
@@ -2474,6 +2560,7 @@ function initModule(id) {
     ch2: () => { window.initGDPAnnual ? window.initGDPAnnual() : updateGDPChart(); window.initGDPGrowthAcct ? window.initGDPGrowthAcct() : updateGrowthAcct(); window.initFiscal ? window.initFiscal() : updateFiscal(); },
     ch3: () => { if(window.initTrade) window.initTrade(); },
     ch4: () => { if(window.initProductivity) window.initProductivity(); },
+    ch5: () => { if(window.initIndustrial) window.initIndustrial(); },
     ch7: () => { updateMincer(); },
     ch8: () => { updateGini(); updateLorenz(); initGatsby(); updateIGM(); },
     ch9: () => { updateDivorce(); },
@@ -2494,6 +2581,9 @@ function initTab(ch, tab) {
     'ch4-labour':    function() { if(window.initLabourProductivity) window.initLabourProductivity(); },
     'ch4-tfp': function() { if(window.initTFP_ch4) window.initTFP_ch4(); },
     'ch4-rnd': function() { if(window.initRnD_ch4) window.initRnD_ch4(); },
+    'ch5-cluster':      function() { if(window.initClusterComposition)  window.initClusterComposition(); },
+    'ch5-productivity': function() { if(window.initClusterProductivity) window.initClusterProductivity(); },
+    'ch5-structural':   function() { if(window.initStructuralTransform) window.initStructuralTransform(); },
     'ch8-gini': updateGini,
     'ch8-lorenz': updateLorenz,
     'ch8-gatsby': initGatsby,
@@ -3589,5 +3679,6 @@ window.addEventListener('DOMContentLoaded', () => {
 <script src="js/modules/gdp-quarterly.js"></script>
 <script src="js/modules/trade.js"></script>
 <script src="js/modules/productivity.js"></script>
+<script src="js/modules/industrial.js"></script>
 </body>
 </html>
