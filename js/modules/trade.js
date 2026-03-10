@@ -239,7 +239,7 @@
     const tv  = d.tiva;
     const years = ['2010','2012','2014','2016','2018','2020','2022','2024'];
 
-    /* ---- CHART 1: VA components of gross exports 2010 vs 2018 (stacked bar) ---- */
+    /* ---- CHART 1: VA components of gross exports 2010 vs 2022 (stacked bar) ---- */
     destroyChart('ch3-gvc-va-components');
     const ctx1 = $('ch3-gvc-va-components');
     if (ctx1) {
@@ -247,7 +247,7 @@
       new Chart(ctx1, {
         type: 'bar',
         data: {
-          labels: ['2010', '2018'],
+          labels: ['2010', '2022'],
           datasets: [
             { label: 'Domestic VA → Consumer', data: vc.domesticVAtoConsumer,
               backgroundColor: '#1a5276cc', borderRadius: 2 },

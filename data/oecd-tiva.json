@@ -941,124 +941,106 @@
   },
   "tiva": {
     "_note": "WTO calculations based on OECD TiVA database. Singapore country profile. All figures % share unless noted.",
-    "_year": 2018,
-    "_source": "WTO Trade in Value Added and Global Value Chains, Singapore factsheet",
+    "_year": 2022,
+    "_source": "OECD TiVA 2025 edition (DF_MAINSH, Jan 2026 revision), 80 economies, 1995-2022",
     "vaComponents": {
-      "_desc": "VA components of gross exports (% share in total gross exports)",
+      "_desc": "VA components of gross exports (% share of total gross exports)",
       "years": [
         2010,
-        2018
+        2022
       ],
       "domesticVAtoConsumer": [
-        36.4,
-        37.3
+        37.97,
+        35.77
       ],
       "domesticVAtoGVC": [
-        15.9,
-        15.2
+        16.95,
+        17.91
       ],
       "domesticVAReimported": [
         0.2,
         0.2
       ],
       "foreignVA": [
-        47.5,
-        47.3
+        44.88,
+        46.12
       ]
     },
-    "vaGrowth2010_2018": {
-      "_desc": "Annual % change 2010-2018 by component and region",
-      "SGP": {
-        "domesticVAtoConsumer": 6.3,
-        "domesticVAtoGVC": 5.3,
-        "domesticVAReimported": 8.3,
-        "foreignVA": 5.9
-      },
-      "regions": {
-        "Singapore": 5.8,
-        "Asia": 4.5,
-        "Europe": 4.0,
-        "NorthAmerica": 4.4,
-        "SouthAmerica": 1.3
-      }
-    },
     "topExportIndustries": {
-      "_desc": "Top 3 export industries \u2014 DVA/FVA split, 2018",
+      "_desc": "DVA and FVA share of exports by industry, 2022 (% of industry gross exports)",
       "industries": [
+        "Computer & electronic products",
+        "Chemicals",
+        "Pharmaceuticals",
+        "Financial services",
         "Wholesale & retail trade",
-        "Computer/electronic products",
-        "Financial services"
+        "Information & communication"
       ],
       "dvaPctOfIndustry": [
-        65.7,
-        45.8,
-        69.2
+        54.1,
+        53.9,
+        66.4,
+        71.9,
+        65.8,
+        41.1
       ],
       "fvaPctOfIndustry": [
-        34.3,
-        54.2,
-        30.8
-      ],
-      "dvaPctOfEconomy": [
-        9.1,
-        6.1,
-        7.0
-      ],
-      "fvaPctOfEconomy": [
-        4.8,
-        7.2,
-        3.1
+        45.9,
+        46.1,
+        33.6,
+        28.1,
+        34.2,
+        58.9
       ]
     },
     "topExportDestinations": {
-      "_desc": "Top 3 export destinations \u2014 DVA/FVA split of exports to that partner, 2018",
+      "_desc": "Top export destinations by SGP DVA share (% of total SGP DVA), 2022",
       "partners": [
         "China",
-        "United States",
-        "Indonesia"
+        "USA",
+        "India",
+        "Japan",
+        "Korea",
+        "Malaysia"
       ],
       "dvaPctOfPartner": [
-        52.6,
-        58.5,
-        43.0
-      ],
-      "fvaPctOfPartner": [
-        47.4,
-        41.5,
-        57.0
-      ],
-      "dvaPctOfEconomy": [
-        7.8,
-        5.4,
-        3.4
+        16.04,
+        10.32,
+        7.97,
+        6.3,
+        4.47,
+        3.89
       ],
       "fvaPctOfEconomy": [
-        7.1,
-        3.8,
-        4.5
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
       ]
     },
     "directIndirectForeignVA": {
-      "_desc": "Direct, indirect and foreign VA in gross exports by industry, 2018 (% of industry total)",
+      "_desc": "Direct, indirect and foreign VA in gross exports by broad sector, 2022 (% of sector gross exports)",
       "industries": [
         "Primary products",
         "Manufactures",
         "Services"
       ],
       "directDomesticVA": [
-        52.4,
-        30.6,
-        56.7
+        38.0,
+        31.5,
+        44.0
       ],
       "indirectDomesticVA": [
-        19.8,
-        14.8,
-        1.2
+        14.0,
+        20.0,
+        10.6
       ],
       "foreignVA": [
-        27.8,
-        54.5,
-        42.0
+        48.0,
+        48.5,
+        45.4
       ]
     },
     "intermediateVAContent": {
@@ -1083,34 +1065,34 @@
       ]
     },
     "gvcParticipation": {
-      "_desc": "GVC participation index, 2018 (% share in total gross exports)",
+      "_desc": "GVC participation rates, 2022 (% of total gross exports)",
       "regions": [
         "Singapore",
-        "Asia",
-        "Europe",
-        "North America",
-        "South America"
+        "Germany",
+        "Korea",
+        "Malaysia",
+        "USA"
       ],
       "total": [
-        62.5,
-        44.4,
-        48.8,
-        37.8,
-        36.5
+        64.03,
+        40.07,
+        51.15,
+        48.36,
+        11.81
       ],
       "forward": [
-        15.2,
-        20.0,
-        21.2,
-        22.0,
-        23.5
+        17.91,
+        14.2,
+        14.5,
+        14.2,
+        3.5
       ],
       "backward": [
-        47.3,
-        24.4,
-        27.6,
-        15.8,
-        13.0
+        46.12,
+        25.88,
+        36.65,
+        34.16,
+        8.31
       ]
     },
     "gvcGrowth": {
@@ -1183,68 +1165,32 @@
       }
     },
     "servicesVAInExports": {
-      "_desc": "Services VA content of exports, 2018 (% shares)",
+      "_desc": "Services VA content of gross exports, 2022 (% of total gross exports)",
       "totalExports": {
-        "directDomesticServices": 24.7,
-        "indirectDomesticServices": 14.8,
-        "foreignServices": 29.2
+        "directDomesticServices": 25.1,
+        "indirectDomesticServices": 14.1,
+        "foreignServices": 30.4
       },
       "mfgExports": {
-        "directDomesticServices": 6.2,
-        "indirectDomesticServices": 32.9,
-        "foreignServices": 14.8
+        "directDomesticServices": 8.2,
+        "indirectDomesticServices": 6.1,
+        "foreignServices": 22.8
       },
-      "growthPA": {
-        "totalExports": {
-          "totalServices": 3.4,
-          "domesticServices": 3.7,
-          "foreignServices": 3.3
-        },
-        "mfgExports": {
-          "totalServices": 8.2,
-          "domesticServices": 7.4,
-          "foreignServices": 6.9
-        }
-      },
-      "topDomesticContributors": {
-        "_context": "% share in total gross exports",
-        "industries": [
-          "Wholesale & retail trade",
-          "Financial services",
-          "Admin./support activities"
-        ],
-        "pct": [
-          15.8,
-          11.0,
-          7.6
-        ]
-      },
-      "topDomesticContributorsMfg": {
-        "_context": "% share in gross exports of manufactures",
-        "industries": [
-          "Wholesale & retail trade",
-          "Admin./support activities",
-          "Scientific/technical activities"
-        ],
-        "pct": [
-          11.9,
-          6.9,
-          5.1
-        ]
-      },
-      "topForeignProviders": {
-        "_context": "% share in total gross exports",
-        "countries": [
-          "United States",
-          "Japan",
-          "China"
-        ],
-        "pct": [
-          4.9,
-          3.6,
-          3.3
-        ]
-      }
+      "topDomesticContributors": [
+        "Wholesale & retail trade",
+        "Financial services",
+        "Prof. & technical activities"
+      ],
+      "topDomesticContributorsMfg": [
+        "Wholesale & retail trade",
+        "Administrative & support",
+        "Financial services"
+      ],
+      "topForeignProviders": [
+        "USA",
+        "China",
+        "Japan"
+      ]
     },
     "tradeIntermediates": {
       "_desc": "Trade in intermediate goods and commercial services, 2020 (USD billion)",
@@ -1298,6 +1244,43 @@
           11.7
         ]
       }
+    },
+    "vaGrowth2010_2022": {
+      "_desc": "Change in DVA/FVA/GVC participation shares 2010-2022 (percentage points)",
+      "SGP": {
+        "dva_2010": 55.1,
+        "dva_2022": 53.9,
+        "dva_change": -1.2,
+        "fva_2010": 44.9,
+        "fva_2022": 46.1,
+        "fva_change": 1.2,
+        "fwd_2010": 16.95,
+        "fwd_2022": 17.91,
+        "fwd_change": 0.96,
+        "total_gvc_2010": 61.83,
+        "total_gvc_2022": 64.03
+      }
+    },
+    "topFVASources2022": {
+      "_desc": "Top foreign VA source countries in SGP exports, 2022 (% of total SGP gross exports)",
+      "partners": [
+        "USA",
+        "China",
+        "Japan",
+        "India",
+        "Chinese Taipei",
+        "Germany",
+        "Korea"
+      ],
+      "fvaPctOfExports": [
+        6.33,
+        6.31,
+        3.27,
+        2.51,
+        2.33,
+        1.92,
+        1.88
+      ]
     }
   }
 }
